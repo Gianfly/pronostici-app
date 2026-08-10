@@ -18,20 +18,45 @@ body {
 h1 {
   text-align: center;
   font-size: 28px;
+  margin-bottom: 20px;
 }
 
 h2 {
-  margin-top: 28px;
+  margin-top: 30px;
+  font-size: 22px;
+}
+
+.controls {
+  background: #1f2937;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+input[type="date"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  margin-bottom: 12px;
 }
 
 button {
+  width: 100%;
   background: #2563eb;
   color: white;
   border: none;
   padding: 12px 18px;
   border-radius: 10px;
   font-size: 16px;
-  margin-bottom: 15px;
+  cursor: pointer;
 }
 
 .card {
@@ -39,6 +64,7 @@ button {
   margin: 12px 0;
   padding: 15px;
   border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
 .over {
@@ -68,10 +94,18 @@ button {
 
 .loading {
   color: #facc15;
+  margin-top: 10px;
 }
 
 .error {
   color: #f87171;
+  margin-top: 10px;
+}
+
+.note {
+  color: #9ca3af;
+  font-size: 13px;
+  margin-top: 10px;
 }
 </style>
 </head>
@@ -80,9 +114,18 @@ button {
 
 <h1>⚽ Pronostici Calcio</h1>
 
-<button onclick="caricaDati()">🔄 Aggiorna</button>
+<div class="controls">
+  <label for="dataScelta">Scegli il giorno</label>
+  <input type="date" id="dataScelta">
+  <button onclick="caricaDati()">🔄 Aggiorna</button>
+  <div class="note">
+    Mostra solo le partite del giorno selezionato.  
+    Under 2.5 filtrato con quota massima 1.60.  
+    Over 1.5 filtrato con quota massima 1.40.
+  </div>
+</div>
 
-<h2>🟢 Over 2.5 filtrati</h2>
+<h2>🟢 Over 1.5 filtrati</h2>
 <div id="over">Caricamento...</div>
 
 <h2>🔴 Under 2.5 filtrati</h2>
@@ -96,25 +139,60 @@ const CAMPIONATI = [
   { key: "soccer_italy_serie_a", nome: "Serie A" },
   { key: "soccer_spain_la_liga", nome: "La Liga" },
   { key: "soccer_germany_bundesliga", nome: "Bundesliga" },
-  { key: "soccer_france_ligue_one", nome: "Ligue 1" }
+  { key: "soccer_france_ligue_one", nome: "Ligue 1" },
+  { key: "soccer_uefa_champs_league", nome: "Champions League" }
 ];
 
-const SOGLIA_OVER = 1.70;
-const SOGLIA_UNDER = 1.60;
+const SOGLIA_OVER_15 = 1.40;
+const SOGLIA_UNDER_25 = 1.60;
+
+function impostaDataOggi() {
+  const input = document.getElementById("dataScelta");
+  const oggi = new Date();
+
+  const anno = oggi.getFullYear();
+  const mese = String(oggi.getMonth() + 1).padStart(2, "0");
+  const giorno = String(oggi.getDate()).padStart(2, "0");
+
+  input.value = anno + "-" + mese + "-" + giorno;
+}
+
+function dataLocaleDaISO(dataISO) {
+  const data = new Date(dataISO);
+
+  const anno = data.getFullYear();
+  const mese = String(data.getMonth() + 1).padStart(2, "0");
+  const giorno = String(data.getDate()).padStart(2, "0");
+
+  return anno + "-" + mese + "-" + giorno;
+}
 
 function probabilitaDaQuota(quota) {
   return Math.round((1 / quota) * 100);
 }
 
+function intervalloUTCPerData(dataScelta) {
+  const inizioLocale = new Date(dataScelta + "T00:00:00");
+  const fineLocale = new Date(dataScelta + "T23:59:59");
+
+  return {
+    inizio: inizioLocale.toISOString(),
+    fine: fineLocale.toISOString()
+  };
+}
+
 async function caricaDati() {
   const overDiv = document.getElementById("over");
   const underDiv = document.getElementById("under");
+  const dataScelta = document.getElementById("dataScelta").value;
 
-  overDiv.innerHTML = "<div class='loading'>Caricamento Over 2.5...</div>";
+  overDiv.innerHTML = "<div class='loading'>Caricamento Over 1.5...</div>";
   underDiv.innerHTML = "<div class='loading'>Caricamento Under 2.5...</div>";
 
   let overList = [];
   let underList = [];
+
+  const intervallo = intervalloUTCPerData(dataScelta);
 
   try {
     for (const campionato of CAMPIONATI) {
@@ -125,7 +203,10 @@ async function caricaDati() {
         "apiKey=" + API_KEY +
         "&regions=eu" +
         "&markets=totals" +
-        "&oddsFormat=decimal";
+        "&oddsFormat=decimal" +
+        "&dateFormat=iso" +
+        "&commenceTimeFrom=" + encodeURIComponent(intervallo.inizio) +
+        "&commenceTimeTo=" + encodeURIComponent(intervallo.fine);
 
       const response = await fetch(url);
       const data = await response.json();
@@ -135,6 +216,12 @@ async function caricaDati() {
       }
 
       data.forEach(partita => {
+        const dataPartitaLocale = dataLocaleDaISO(partita.commence_time);
+
+        if (dataPartitaLocale !== dataScelta) {
+          return;
+        }
+
         const nomePartita = partita.home_team + " - " + partita.away_team;
         const dataOra = new Date(partita.commence_time).toLocaleString("it-IT");
 
@@ -153,24 +240,9 @@ async function caricaDati() {
               if (!quota || !linea) return;
 
               if (
-                outcome.name === "Under" &&
-                linea === 2.5 &&
-                quota <= SOGLIA_UNDER
-              ) {
-                underList.push({
-                  partita: nomePartita,
-                  campionato: campionato.nome,
-                  ora: dataOra,
-                  quota: quota,
-                  bookmaker: bookmaker.title,
-                  probabilita: probabilitaDaQuota(quota)
-                });
-              }
-
-              if (
                 outcome.name === "Over" &&
-                linea === 2.5 &&
-                quota <= SOGLIA_OVER
+                linea === 1.5 &&
+                quota <= SOGLIA_OVER_15
               ) {
                 overList.push({
                   partita: nomePartita,
@@ -181,58 +253,16 @@ async function caricaDati() {
                   probabilita: probabilitaDaQuota(quota)
                 });
               }
-            });
-          });
-        });
-      });
-    }
 
-    overList.sort((a, b) => a.quota - b.quota);
-    underList.sort((a, b) => a.quota - b.quota);
-
-    overDiv.innerHTML = overList.length
-      ? overList.map(creaCardOver).join("")
-      : "<div class='error'>Nessun Over 2.5 trovato con quota ≤ " + SOGLIA_OVER + "</div>";
-
-    underDiv.innerHTML = underList.length
-      ? underList.map(creaCardUnder).join("")
-      : "<div class='error'>Nessun Under 2.5 trovato con quota ≤ " + SOGLIA_UNDER + "</div>";
-
-  } catch (errore) {
-    overDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
-    underDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
-    console.log(errore);
-  }
-}
-
-function creaCardOver(x) {
-  return `
-    <div class="card over">
-      <div class="match">${x.partita}</div>
-      <div class="info">${x.campionato}</div>
-      <div class="info">${x.ora}</div>
-      <div class="quota">Over 2.5 @ ${x.quota}</div>
-      <div class="info">Probabilità stimata: ${x.probabilita}%</div>
-      <div class="info">Bookmaker: ${x.bookmaker}</div>
-    </div>
-  `;
-}
-
-function creaCardUnder(x) {
-  return `
-    <div class="card under">
-      <div class="match">${x.partita}</div>
-      <div class="info">${x.campionato}</div>
-      <div class="info">${x.ora}</div>
-      <div class="quota">Under 2.5 @ ${x.quota}</div>
-      <div class="info">Probabilità stimata: ${x.probabilita}%</div>
-      <div class="info">Bookmaker: ${x.bookmaker}</div>
-    </div>
-  `;
-}
-
-caricaDati();
-</script>
-
-</body>
-</html>
+              if (
+                outcome.name === "Under" &&
+                linea === 2.5 &&
+                quota <= SOGLIA_UNDER_25
+              ) {
+                underList.push({
+                  partita: nomePartita,
+                  campionato: campionato.nome,
+                  ora: dataOra,
+                  quota: quota,
+                  bookmaker: bookmaker.title,
+                  probabilita: 
