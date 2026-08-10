@@ -1,4 +1,3 @@
-alert("nuova versione");
 const API_KEY = "fbfc72a65736699d483a2c09ec4621c5";
 
 async function caricaDati() {
