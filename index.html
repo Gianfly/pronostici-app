@@ -102,6 +102,16 @@ button {
   margin-top: 10px;
 }
 
+.debug {
+  background: #374151;
+  color: #e5e7eb;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-top: 10px;
+  line-height: 1.4;
+}
+
 .note {
   color: #9ca3af;
   font-size: 13px;
@@ -122,10 +132,11 @@ button {
   <button onclick="caricaDati()">🔄 Aggiorna</button>
 
   <div class="note">
-    Mostra solo le partite del giorno selezionato.<br>
-    🟢 Over 2.5 con quota da 1.10 a 2.00<br>
-    🔴 Under 2.5 con quota da 1.10 a 2.00
+    Mostra solo Over 2.5 e Under 2.5 del giorno selezionato.<br>
+    Range quota: da 1.40 a 1.75.
   </div>
+
+  <div id="debug" class="debug">Pronto.</div>
 </div>
 
 <h2>🟢 Over 2.5</h2>
@@ -147,8 +158,8 @@ const CAMPIONATI = [
   { key: "soccer_uefa_europa_league", nome: "Europa League" }
 ];
 
-const QUOTA_MINIMA = 1.10;
-const QUOTA_MASSIMA = 2.00;
+const QUOTA_MINIMA = 1.40;
+const QUOTA_MASSIMA = 1.75;
 
 function impostaDataOggi() {
   const input = document.getElementById("dataScelta");
@@ -171,14 +182,8 @@ function dataLocaleDaISO(dataISO) {
   return anno + "-" + mese + "-" + giorno;
 }
 
-function intervalloUTCPerData(dataScelta) {
-  const inizioLocale = new Date(dataScelta + "T00:00:00");
-  const fineLocale = new Date(dataScelta + "T23:59:59");
-
-  return {
-    inizio: inizioLocale.toISOString(),
-    fine: fineLocale.toISOString()
-  };
+function oraLocale(dataISO) {
+  return new Date(dataISO).toLocaleString("it-IT");
 }
 
 function probabilitaDaQuota(quota) {
@@ -192,15 +197,18 @@ function quotaNelRange(quota) {
 async function caricaDati() {
   const overDiv = document.getElementById("over");
   const underDiv = document.getElementById("under");
+  const debugDiv = document.getElementById("debug");
   const dataScelta = document.getElementById("dataScelta").value;
 
   overDiv.innerHTML = "<div class='loading'>Caricamento Over 2.5...</div>";
   underDiv.innerHTML = "<div class='loading'>Caricamento Under 2.5...</div>";
+  debugDiv.innerHTML = "Caricamento dati API...";
 
   let overList = [];
   let underList = [];
-
-  const intervallo = intervalloUTCPerData(dataScelta);
+  let partiteTotaliLette = 0;
+  let partiteDelGiorno = 0;
+  let mercatiTotalsTrovati = 0;
 
   try {
     for (const campionato of CAMPIONATI) {
@@ -212,16 +220,17 @@ async function caricaDati() {
         "&regions=uk,eu" +
         "&markets=totals" +
         "&oddsFormat=decimal" +
-        "&dateFormat=iso" +
-        "&commenceTimeFrom=" + encodeURIComponent(intervallo.inizio) +
-        "&commenceTimeTo=" + encodeURIComponent(intervallo.fine);
+        "&dateFormat=iso";
 
       const response = await fetch(url);
       const data = await response.json();
 
       if (!Array.isArray(data)) {
+        console.log("Risposta non valida per", campionato.nome, data);
         continue;
       }
+
+      partiteTotaliLette += data.length;
 
       data.forEach(partita => {
         const dataPartitaLocale = dataLocaleDaISO(partita.commence_time);
@@ -230,8 +239,10 @@ async function caricaDati() {
           return;
         }
 
+        partiteDelGiorno++;
+
         const nomePartita = partita.home_team + " - " + partita.away_team;
-        const dataOra = new Date(partita.commence_time).toLocaleString("it-IT");
+        const dataOra = oraLocale(partita.commence_time);
 
         if (!partita.bookmakers || partita.bookmakers.length === 0) return;
 
@@ -240,6 +251,8 @@ async function caricaDati() {
 
           bookmaker.markets.forEach(market => {
             if (market.key !== "totals") return;
+
+            mercatiTotalsTrovati++;
 
             market.outcomes.forEach(outcome => {
               const quota = Number(outcome.price);
@@ -285,6 +298,12 @@ async function caricaDati() {
     overList.sort((a, b) => a.quota - b.quota);
     underList.sort((a, b) => a.quota - b.quota);
 
+    debugDiv.innerHTML =
+      "Partite totali lette dall'API: " + partiteTotaliLette + "<br>" +
+      "Partite nel giorno selezionato: " + partiteDelGiorno + "<br>" +
+      "Mercati Over/Under trovati: " + mercatiTotalsTrovati + "<br>" +
+      "Range quote applicato: " + QUOTA_MINIMA + " - " + QUOTA_MASSIMA;
+
     overDiv.innerHTML = overList.length
       ? overList.map(creaCardOver).join("")
       : "<div class='error'>Nessun Over 2.5 trovato per questa data con quota da " + QUOTA_MINIMA + " a " + QUOTA_MASSIMA + "</div>";
@@ -296,6 +315,7 @@ async function caricaDati() {
   } catch (errore) {
     overDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
     underDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
+    debugDiv.innerHTML = "Errore tecnico nel caricamento. Controlla API key o console browser.";
     console.log(errore);
   }
 }
