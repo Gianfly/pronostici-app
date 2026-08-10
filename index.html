@@ -17,11 +17,11 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 32px;
+  font-size: 28px;
 }
 
 h2 {
-  margin-top: 30px;
+  margin-top: 28px;
 }
 
 button {
@@ -31,7 +31,7 @@ button {
   padding: 12px 18px;
   border-radius: 10px;
   font-size: 16px;
-  cursor: pointer;
+  margin-bottom: 15px;
 }
 
 .card {
@@ -39,7 +39,6 @@ button {
   margin: 12px 0;
   padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
 .over {
@@ -56,8 +55,8 @@ button {
 }
 
 .info {
-  font-size: 14px;
   color: #d1d5db;
+  font-size: 14px;
   margin-top: 5px;
 }
 
@@ -69,12 +68,10 @@ button {
 
 .loading {
   color: #facc15;
-  margin-top: 10px;
 }
 
 .error {
   color: #f87171;
-  margin-top: 10px;
 }
 </style>
 </head>
@@ -85,92 +82,153 @@ button {
 
 <button onclick="caricaDati()">🔄 Aggiorna</button>
 
-<h2>🟢 Over 1.5</h2>
+<h2>🟢 Over 2.5 filtrati</h2>
 <div id="over">Caricamento...</div>
 
-<h2>🔴 Under 2.5</h2>
+<h2>🔴 Under 2.5 filtrati</h2>
 <div id="under">Caricamento...</div>
 
 <script>
 const API_KEY = "fbfc72a65736699d483a2c09ec4621c5";
 
+const CAMPIONATI = [
+  { key: "soccer_epl", nome: "Premier League" },
+  { key: "soccer_italy_serie_a", nome: "Serie A" },
+  { key: "soccer_spain_la_liga", nome: "La Liga" },
+  { key: "soccer_germany_bundesliga", nome: "Bundesliga" },
+  { key: "soccer_france_ligue_one", nome: "Ligue 1" }
+];
+
+const SOGLIA_OVER = 1.70;
+const SOGLIA_UNDER = 1.60;
+
+function probabilitaDaQuota(quota) {
+  return Math.round((1 / quota) * 100);
+}
+
 async function caricaDati() {
   const overDiv = document.getElementById("over");
   const underDiv = document.getElementById("under");
 
-  overDiv.innerHTML = "<div class='loading'>Caricamento Over 1.5...</div>";
+  overDiv.innerHTML = "<div class='loading'>Caricamento Over 2.5...</div>";
   underDiv.innerHTML = "<div class='loading'>Caricamento Under 2.5...</div>";
 
+  let overList = [];
+  let underList = [];
+
   try {
-    const url =
-      "https://api.the-odds-api.com/v4/sports/soccer_epl/odds/" +
-      "?apiKey=" + API_KEY +
-      "&regions=eu" +
-      "&markets=totals" +
-      "&oddsFormat=decimal";
+    for (const campionato of CAMPIONATI) {
+      const url =
+        "https://api.the-odds-api.com/v4/sports/" +
+        campionato.key +
+        "/odds/?" +
+        "apiKey=" + API_KEY +
+        "&regions=eu" +
+        "&markets=totals" +
+        "&oddsFormat=decimal";
 
-    const response = await fetch(url);
-    const data = await response.json();
+      const response = await fetch(url);
+      const data = await response.json();
 
-    if (!Array.isArray(data)) {
-      overDiv.innerHTML = "<div class='error'>Errore API o limite richieste raggiunto.</div>";
-      underDiv.innerHTML = "<div class='error'>Controlla API key o piano gratuito.</div>";
-      return;
-    }
+      if (!Array.isArray(data)) {
+        continue;
+      }
 
-    let overHTML = "";
-    let underHTML = "";
+      data.forEach(partita => {
+        const nomePartita = partita.home_team + " - " + partita.away_team;
+        const dataOra = new Date(partita.commence_time).toLocaleString("it-IT");
 
-    data.forEach(partita => {
-      const nomePartita = partita.home_team + " - " + partita.away_team;
-      const ora = new Date(partita.commence_time).toLocaleString("it-IT");
+        if (!partita.bookmakers || partita.bookmakers.length === 0) return;
 
-      if (!partita.bookmakers || partita.bookmakers.length === 0) return;
+        partita.bookmakers.forEach(bookmaker => {
+          if (!bookmaker.markets) return;
 
-      partita.bookmakers.forEach(bookmaker => {
-        if (!bookmaker.markets) return;
+          bookmaker.markets.forEach(market => {
+            if (market.key !== "totals") return;
 
-        bookmaker.markets.forEach(market => {
-          if (market.key !== "totals") return;
+            market.outcomes.forEach(outcome => {
+              const quota = Number(outcome.price);
+              const linea = Number(outcome.point);
 
-          market.outcomes.forEach(outcome => {
-            const quota = outcome.price;
-            const linea = outcome.point;
+              if (!quota || !linea) return;
 
-            if (outcome.name === "Over" && linea === 1.5) {
-              overHTML += `
-                <div class="card over">
-                  <div class="match">${nomePartita}</div>
-                  <div class="info">${ora}</div>
-                  <div class="info">Bookmaker: ${bookmaker.title}</div>
-                  <div class="quota">Over 1.5 - Quota ${quota}</div>
-                </div>
-              `;
-            }
+              if (
+                outcome.name === "Under" &&
+                linea === 2.5 &&
+                quota <= SOGLIA_UNDER
+              ) {
+                underList.push({
+                  partita: nomePartita,
+                  campionato: campionato.nome,
+                  ora: dataOra,
+                  quota: quota,
+                  bookmaker: bookmaker.title,
+                  probabilita: probabilitaDaQuota(quota)
+                });
+              }
 
-            if (outcome.name === "Under" && linea === 2.5) {
-              underHTML += `
-                <div class="card under">
-                  <div class="match">${nomePartita}</div>
-                  <div class="info">${ora}</div>
-                  <div class="info">Bookmaker: ${bookmaker.title}</div>
-                  <div class="quota">Under 2.5 - Quota ${quota}</div>
-                </div>
-              `;
-            }
+              if (
+                outcome.name === "Over" &&
+                linea === 2.5 &&
+                quota <= SOGLIA_OVER
+              ) {
+                overList.push({
+                  partita: nomePartita,
+                  campionato: campionato.nome,
+                  ora: dataOra,
+                  quota: quota,
+                  bookmaker: bookmaker.title,
+                  probabilita: probabilitaDaQuota(quota)
+                });
+              }
+            });
           });
         });
       });
-    });
+    }
 
-    overDiv.innerHTML = overHTML || "<div class='error'>Nessun Over 1.5 trovato.</div>";
-    underDiv.innerHTML = underHTML || "<div class='error'>Nessun Under 2.5 trovato.</div>";
+    overList.sort((a, b) => a.quota - b.quota);
+    underList.sort((a, b) => a.quota - b.quota);
+
+    overDiv.innerHTML = overList.length
+      ? overList.map(creaCardOver).join("")
+      : "<div class='error'>Nessun Over 2.5 trovato con quota ≤ " + SOGLIA_OVER + "</div>";
+
+    underDiv.innerHTML = underList.length
+      ? underList.map(creaCardUnder).join("")
+      : "<div class='error'>Nessun Under 2.5 trovato con quota ≤ " + SOGLIA_UNDER + "</div>";
 
   } catch (errore) {
-    overDiv.innerHTML = "<div class='error'>Errore nel caricamento dati.</div>";
-    underDiv.innerHTML = "<div class='error'>Errore nel caricamento dati.</div>";
+    overDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
+    underDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
     console.log(errore);
   }
+}
+
+function creaCardOver(x) {
+  return `
+    <div class="card over">
+      <div class="match">${x.partita}</div>
+      <div class="info">${x.campionato}</div>
+      <div class="info">${x.ora}</div>
+      <div class="quota">Over 2.5 @ ${x.quota}</div>
+      <div class="info">Probabilità stimata: ${x.probabilita}%</div>
+      <div class="info">Bookmaker: ${x.bookmaker}</div>
+    </div>
+  `;
+}
+
+function creaCardUnder(x) {
+  return `
+    <div class="card under">
+      <div class="match">${x.partita}</div>
+      <div class="info">${x.campionato}</div>
+      <div class="info">${x.ora}</div>
+      <div class="quota">Under 2.5 @ ${x.quota}</div>
+      <div class="info">Probabilità stimata: ${x.probabilita}%</div>
+      <div class="info">Bookmaker: ${x.bookmaker}</div>
+    </div>
+  `;
 }
 
 caricaDati();
