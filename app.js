@@ -1,10 +1,7 @@
-function caricaDati() {
+alert("APPJS CARICATO");
 
-  document.getElementById("over").innerHTML =
-    "<div><h3>TEST OVER</h3></div>";
+document.getElementById("over").innerHTML =
+  "<h2>TEST OVER</h2>";
 
-  document.getElementById("under").innerHTML =
-    "<div><h3>TEST UNDER</h3></div>";
-}
-
-caricaDati();
+document.getElementById("under").innerHTML =
+  "<h2>TEST UNDER</h2>";
