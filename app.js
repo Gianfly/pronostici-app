@@ -1,10 +1,10 @@
 function caricaDati() {
 
   document.getElementById("over").innerHTML =
-    "<div class='card over'><b>TEST OVER</b></div>";
+    "<div><h3>TEST OVER</h3></div>";
 
   document.getElementById("under").innerHTML =
-    "<div class='card under'><b>TEST UNDER</b></div>";
+    "<div><h3>TEST UNDER</h3></div>";
 }
 
 caricaDati();
