@@ -123,15 +123,15 @@ button {
 
   <div class="note">
     Mostra solo le partite del giorno selezionato.<br>
-    🟢 Over 2.5 con quota massima 1.80<br>
-    🔴 Under 2.5 con quota massima 1.70
+    🟢 Over 2.5 con quota da 1.40 a 1.75<br>
+    🔴 Under 2.5 con quota da 1.40 a 1.75
   </div>
 </div>
 
-<h2>🟢 Over 2.5 filtrati</h2>
+<h2>🟢 Over 2.5</h2>
 <div id="over">Caricamento...</div>
 
-<h2>🔴 Under 2.5 filtrati</h2>
+<h2>🔴 Under 2.5</h2>
 <div id="under">Caricamento...</div>
 
 <script>
@@ -147,8 +147,8 @@ const CAMPIONATI = [
   { key: "soccer_uefa_europa_league", nome: "Europa League" }
 ];
 
-const SOGLIA_OVER_25 = 1.80;
-const SOGLIA_UNDER_25 = 1.70;
+const QUOTA_MINIMA = 1.40;
+const QUOTA_MASSIMA = 1.75;
 
 function impostaDataOggi() {
   const input = document.getElementById("dataScelta");
@@ -185,6 +185,10 @@ function probabilitaDaQuota(quota) {
   return Math.round((1 / quota) * 100);
 }
 
+function quotaNelRange(quota) {
+  return quota >= QUOTA_MINIMA && quota <= QUOTA_MASSIMA;
+}
+
 async function caricaDati() {
   const overDiv = document.getElementById("over");
   const underDiv = document.getElementById("under");
@@ -205,7 +209,7 @@ async function caricaDati() {
         campionato.key +
         "/odds/?" +
         "apiKey=" + API_KEY +
-        "&regions=eu" +
+        "&regions=uk,eu" +
         "&markets=totals" +
         "&oddsFormat=decimal" +
         "&dateFormat=iso" +
@@ -246,7 +250,7 @@ async function caricaDati() {
               if (
                 outcome.name === "Over" &&
                 linea === 2.5 &&
-                quota <= SOGLIA_OVER_25
+                quotaNelRange(quota)
               ) {
                 overList.push({
                   partita: nomePartita,
@@ -261,7 +265,7 @@ async function caricaDati() {
               if (
                 outcome.name === "Under" &&
                 linea === 2.5 &&
-                quota <= SOGLIA_UNDER_25
+                quotaNelRange(quota)
               ) {
                 underList.push({
                   partita: nomePartita,
@@ -283,11 +287,11 @@ async function caricaDati() {
 
     overDiv.innerHTML = overList.length
       ? overList.map(creaCardOver).join("")
-      : "<div class='error'>Nessun Over 2.5 trovato per questa data con quota ≤ " + SOGLIA_OVER_25 + "</div>";
+      : "<div class='error'>Nessun Over 2.5 trovato per questa data con quota da " + QUOTA_MINIMA + " a " + QUOTA_MASSIMA + "</div>";
 
     underDiv.innerHTML = underList.length
       ? underList.map(creaCardUnder).join("")
-      : "<div class='error'>Nessun Under 2.5 trovato per questa data con quota ≤ " + SOGLIA_UNDER_25 + "</div>";
+      : "<div class='error'>Nessun Under 2.5 trovato per questa data con quota da " + QUOTA_MINIMA + " a " + QUOTA_MASSIMA + "</div>";
 
   } catch (errore) {
     overDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
