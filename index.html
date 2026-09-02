@@ -5,173 +5,271 @@
 
 <meta
   name="viewport"
-  content="width=device-width, initial-scale=1.0"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
+
+<meta name="theme-color" content="#07111f">
 
 <title>Pronostici Over 1.5</title>
 
 <style>
+:root {
+  --sfondo: #07111f;
+  --sfondo-secondario: #0f1d30;
+  --scheda: #162438;
+  --bordo: #29394f;
+  --testo: #f8fafc;
+  --testo-secondario: #a8b5c7;
+  --verde: #22c55e;
+  --verde-scuro: #14532d;
+  --blu: #2563eb;
+  --giallo: #facc15;
+  --arancione: #fb923c;
+  --rosso: #f87171;
+}
+
 * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  padding: 18px;
-  font-family: Arial, sans-serif;
-  background:
-    linear-gradient(
-      180deg,
-      #020617 0%,
-      #111827 100%
-    );
-  color: white;
-  min-height: 100vh;
+html {
+  background: var(--sfondo);
 }
 
-.container {
-  max-width: 850px;
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding:
+    max(18px, env(safe-area-inset-top))
+    16px
+    max(30px, env(safe-area-inset-bottom));
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  background:
+    radial-gradient(
+      circle at top,
+      #163252 0,
+      var(--sfondo) 320px
+    );
+  color: var(--testo);
+}
+
+.contenitore {
+  width: 100%;
+  max-width: 720px;
   margin: 0 auto;
 }
 
-h1 {
+.intestazione {
   text-align: center;
-  margin: 10px 0 6px;
-  font-size: 28px;
+  padding: 10px 5px 20px;
 }
 
-.subtitle {
-  text-align: center;
-  color: #94a3b8;
+.logo {
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  border-radius: 20px;
+  font-size: 31px;
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.25);
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+
+.sottotitolo {
+  margin-top: 8px;
+  color: var(--testo-secondario);
   font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 20px;
 }
 
-.controls {
-  background: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 20px;
+.pannello {
+  padding: 15px;
+  margin-bottom: 18px;
+  background: rgba(15, 29, 48, 0.94);
+  border: 1px solid var(--bordo);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+.filtri {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 11px;
 }
 
 label {
   display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
+  color: var(--testo-secondario);
+  font-size: 13px;
+  font-weight: 700;
 }
 
-input[type="date"] {
+input,
+select {
   width: 100%;
-  padding: 13px;
-  border: none;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  font-size: 17px;
-  background: white;
+  min-height: 48px;
+  padding: 11px 12px;
+  border: 1px solid var(--bordo);
+  border-radius: 12px;
+  background: #ffffff;
   color: #111827;
+  font-size: 16px;
 }
 
 button {
   width: 100%;
-  border: none;
-  border-radius: 10px;
-  padding: 13px;
-  background: #2563eb;
+  min-height: 50px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--blu), #3b82f6);
   color: white;
-  font-size: 17px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.27);
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 button:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
+  cursor: default;
 }
 
-.regole {
+.stato {
   margin-top: 12px;
-  padding: 11px;
-  background: #111827;
-  border-radius: 10px;
-  color: #cbd5e1;
+  color: var(--testo-secondario);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-.status {
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 18px;
-  color: #cbd5e1;
-  font-size: 13px;
-  line-height: 1.6;
+.titolo-risultati {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 22px 2px 12px;
 }
 
-.risultati-titolo {
-  margin: 25px 0 12px;
-  font-size: 21px;
+.titolo-risultati h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.contatore {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--scheda);
+  color: var(--testo-secondario);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .card {
-  background: #1f2937;
-  border: 1px solid #374151;
-  border-left: 6px solid #22c55e;
-  border-radius: 14px;
-  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  padding: 17px;
   margin-bottom: 13px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30, 56, 80, 0.98),
+      rgba(22, 36, 56, 0.98)
+    );
+  border: 1px solid var(--bordo);
+  border-left: 6px solid var(--verde);
+  border-radius: 17px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: -42px;
+  right: -42px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.08);
 }
 
 .partita {
+  position: relative;
+  z-index: 1;
+  padding-right: 15px;
   font-size: 19px;
-  font-weight: bold;
+  font-weight: 850;
   line-height: 1.35;
 }
 
 .dettagli {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
   margin-top: 11px;
 }
 
-.badge {
-  display: inline-block;
-  background: #111827;
-  border: 1px solid #374151;
-  border-radius: 999px;
+.etichetta {
   padding: 6px 9px;
-  color: #d1d5db;
-  font-size: 13px;
+  border: 1px solid var(--bordo);
+  border-radius: 999px;
+  background: rgba(7, 17, 31, 0.55);
+  color: #d8e1ec;
+  font-size: 12px;
 }
 
 .pronostico {
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
   color: #4ade80;
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 13px;
+  font-size: 17px;
+  font-weight: 850;
+}
+
+.riga-finale {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .quota {
-  font-size: 17px;
-  font-weight: bold;
-  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 800;
 }
 
 .affidabilita {
-  display: inline-block;
-  margin-top: 9px;
-  padding: 7px 11px;
-  border-radius: 9px;
-  font-size: 14px;
-  font-weight: bold;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .alta {
-  background: #14532d;
+  background: var(--verde-scuro);
   color: #bbf7d0;
 }
 
@@ -181,165 +279,174 @@ button:disabled {
 }
 
 .discreta {
-  background: #854d0e;
-  color: #fef08a;
+  background: #78350f;
+  color: #fde68a;
 }
 
-.loading {
-  color: #facc15;
-  padding: 15px 0;
+.caricamento,
+.vuoto,
+.errore {
+  padding: 18px;
+  border-radius: 15px;
+  line-height: 1.55;
 }
 
-.nessun-risultato {
-  background: #1f2937;
-  border: 1px dashed #64748b;
-  border-radius: 14px;
-  padding: 17px;
-  color: #cbd5e1;
-  line-height: 1.6;
+.caricamento {
+  background: var(--scheda);
+  color: var(--giallo);
+}
+
+.vuoto {
+  background: var(--scheda);
+  border: 1px dashed #53647a;
+  color: var(--testo-secondario);
 }
 
 .errore {
   background: #450a0a;
   border: 1px solid #991b1b;
-  border-radius: 14px;
-  padding: 17px;
   color: #fecaca;
-  line-height: 1.6;
+}
+
+.aggiornamento {
+  margin-top: 8px;
+  text-align: center;
+  color: #7e8da2;
+  font-size: 12px;
 }
 
 .avviso {
-  margin-top: 20px;
-  color: #94a3b8;
+  margin-top: 22px;
+  padding: 13px;
+  border-radius: 13px;
+  background: rgba(15, 29, 48, 0.8);
+  color: #8492a6;
   font-size: 12px;
   line-height: 1.5;
   text-align: center;
+}
+
+@media (min-width: 620px) {
+  .filtri {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  button {
+    grid-column: 1 / -1;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<main class="contenitore">
 
-  <h1>⚽ Pronostici Over 1.5</h1>
+  <header class="intestazione">
+    <div class="logo">⚽</div>
 
-  <div class="subtitle">
-    Selezione automatica delle partite con quota media
-    Over 1.5 compresa tra 1,30 e 1,50.
-  </div>
+    <h1>Pronostici Over 1.5</h1>
 
-  <div class="controls">
+    <div class="sottotitolo">
+      Partite selezionate con quota compresa
+      tra 1,30 e 1,50
+    </div>
+  </header>
 
-    <label for="dataScelta">
-      📅 Scegli il giorno
-    </label>
+  <section class="pannello">
 
-    <input
-      type="date"
-      id="dataScelta"
-    >
+    <div class="filtri">
+
+      <div>
+        <label for="dataScelta">
+          Data
+        </label>
+
+        <input
+          type="date"
+          id="dataScelta"
+        >
+      </div>
+
+      <div>
+        <label for="filtroAffidabilita">
+          Affidabilità
+        </label>
+
+        <select id="filtroAffidabilita">
+          <option value="TUTTE">
+            Tutte
+          </option>
+
+          <option value="ALTA">
+            Alta
+          </option>
+
+          <option value="BUONA">
+            Buona
+          </option>
+
+          <option value="DISCRETA">
+            Discreta
+          </option>
+        </select>
+      </div>
+
+    </div>
 
     <button
       id="pulsanteAggiorna"
-      onclick="caricaPronostici()"
+      type="button"
     >
-      🔄 Cerca pronostici
+      🔄 Aggiorna partite
     </button>
 
-    <div class="regole">
-      <strong>Regole dell’algoritmo</strong><br>
-      Quota media minima: 1,30<br>
-      Quota media massima: 1,50<br>
-      Numero minimo di quote disponibili: 2<br>
-      Visualizzazione: partita, ora, campionato,
-      affidabilità e quota media
+    <div id="stato" class="stato">
+      Caricamento automatico in corso.
     </div>
 
+  </section>
+
+  <div class="titolo-risultati">
+
+    <h2>🟢 Selezioni del giorno</h2>
+
+    <span
+      id="contatore"
+      class="contatore"
+    >
+      0 partite
+    </span>
+
   </div>
 
-  <div id="status" class="status">
-    Pronto per la ricerca.
-  </div>
+  <section id="listaPartite">
 
-  <h2 class="risultati-titolo">
-    🟢 Partite selezionate
-  </h2>
+    <div class="caricamento">
+      Caricamento delle partite...
+    </div>
 
-  <div id="risultati">
-    Seleziona una data e premi “Cerca pronostici”.
-  </div>
+  </section>
+
+  <div id="ultimoAggiornamento" class="aggiornamento"></div>
 
   <div class="avviso">
-    Le indicazioni sono ricavate dalle quote disponibili
-    e non garantiscono il risultato della partita.
+    I pronostici hanno finalità informative.
+    Nessuna selezione garantisce il risultato.
   </div>
 
-</div>
+</main>
 
 <script>
-const API_KEY = "2eb85afa7b46ad7e07dd27f4ddc5a016";
+const FILE_PARTITE = "partite.json";
 
-/*
-  Inserisci qui le competizioni che vuoi analizzare.
-  Le competizioni non disponibili per il tuo piano
-  vengono semplicemente ignorate.
-*/
-const CAMPIONATI = [
-  {
-    key: "soccer_italy_serie_a",
-    nome: "Serie A"
-  },
-  {
-    key: "soccer_italy_serie_b",
-    nome: "Serie B"
-  },
-  {
-    key: "soccer_epl",
-    nome: "Premier League"
-  },
-  {
-    key: "soccer_efl_champ",
-    nome: "Championship"
-  },
-  {
-    key: "soccer_spain_la_liga",
-    nome: "La Liga"
-  },
-  {
-    key: "soccer_germany_bundesliga",
-    nome: "Bundesliga"
-  },
-  {
-    key: "soccer_france_ligue_one",
-    nome: "Ligue 1"
-  },
-  {
-    key: "soccer_netherlands_eredivisie",
-    nome: "Eredivisie"
-  },
-  {
-    key: "soccer_portugal_primeira_liga",
-    nome: "Primeira Liga"
-  },
-  {
-    key: "soccer_uefa_champs_league",
-    nome: "Champions League"
-  },
-  {
-    key: "soccer_uefa_europa_league",
-    nome: "Europa League"
-  }
-];
+let tutteLePartite = [];
 
-const QUOTA_MINIMA = 1.30;
-const QUOTA_MASSIMA = 1.50;
-const NUMERO_MINIMO_QUOTE = 2;
-
-function impostaDataOggi() {
+function dataOggi() {
   const oggi = new Date();
 
   const anno = oggi.getFullYear();
+
   const mese = String(
     oggi.getMonth() + 1
   ).padStart(2, "0");
@@ -348,476 +455,288 @@ function impostaDataOggi() {
     oggi.getDate()
   ).padStart(2, "0");
 
-  document.getElementById("dataScelta").value =
-    anno + "-" + mese + "-" + giorno;
-}
-
-function dataLocaleFormatoISO(dataISO) {
-  const data = new Date(dataISO);
-
-  const anno = data.getFullYear();
-
-  const mese = String(
-    data.getMonth() + 1
-  ).padStart(2, "0");
-
-  const giorno = String(
-    data.getDate()
-  ).padStart(2, "0");
-
   return anno + "-" + mese + "-" + giorno;
 }
 
-function formattaOra(dataISO) {
-  return new Date(dataISO).toLocaleTimeString(
-    "it-IT",
-    {
-      hour: "2-digit",
-      minute: "2-digit"
-    }
+function normalizzaQuota(quota) {
+  return Number(
+    String(quota).replace(",", ".")
   );
 }
 
-function arrotondaQuota(numero) {
-  return Math.round(numero * 100) / 100;
-}
+function classeAffidabilita(affidabilita) {
+  const valore = String(
+    affidabilita || ""
+  ).toLowerCase();
 
-function calcolaMedia(valori) {
-  if (!valori.length) {
-    return 0;
+  if (valore === "alta") {
+    return "alta";
   }
 
-  const totale = valori.reduce(
-    (somma, valore) => somma + valore,
-    0
-  );
-
-  return arrotondaQuota(
-    totale / valori.length
-  );
-}
-
-function calcolaDifferenzaQuote(valori) {
-  if (!valori.length) {
-    return 0;
+  if (valore === "buona") {
+    return "buona";
   }
 
-  const minima = Math.min(...valori);
-  const massima = Math.max(...valori);
-
-  return arrotondaQuota(
-    massima - minima
-  );
+  return "discreta";
 }
 
-function calcolaAffidabilita(
-  quotaMedia,
-  numeroQuote,
-  differenzaQuote
-) {
-  /*
-    Il livello è un indicatore interno:
-    quota più bassa, più fonti e minore
-    differenza tra le quote aumentano
-    il livello visualizzato.
-  */
-
-  if (
-    quotaMedia >= 1.30 &&
-    quotaMedia <= 1.36 &&
-    numeroQuote >= 3 &&
-    differenzaQuote <= 0.20
-  ) {
-    return {
-      testo: "ALTA",
-      classe: "alta"
-    };
-  }
-
-  if (
-    quotaMedia >= 1.30 &&
-    quotaMedia <= 1.43 &&
-    numeroQuote >= 2 &&
-    differenzaQuote <= 0.30
-  ) {
-    return {
-      testo: "BUONA",
-      classe: "buona"
-    };
-  }
-
-  return {
-    testo: "DISCRETA",
-    classe: "discreta"
-  };
+function pulisciTesto(testo) {
+  return String(testo || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
-function estraiQuoteOver15(partita) {
-  const quote = [];
+function creaCard(partita) {
+  const affidabilita =
+    String(partita.affidabilita || "DISCRETA")
+      .toUpperCase();
 
-  if (
-    !partita.bookmakers ||
-    !Array.isArray(partita.bookmakers)
-  ) {
-    return quote;
-  }
+  const classe =
+    classeAffidabilita(affidabilita);
 
-  partita.bookmakers.forEach(bookmaker => {
+  const quota =
+    normalizzaQuota(partita.quota)
+      .toFixed(2)
+      .replace(".", ",");
 
-    if (
-      !bookmaker.markets ||
-      !Array.isArray(bookmaker.markets)
-    ) {
-      return;
-    }
-
-    bookmaker.markets.forEach(mercato => {
-
-      if (mercato.key !== "totals") {
-        return;
-      }
-
-      if (
-        !mercato.outcomes ||
-        !Array.isArray(mercato.outcomes)
-      ) {
-        return;
-      }
-
-      mercato.outcomes.forEach(esito => {
-        const nome = String(
-          esito.name || ""
-        ).toLowerCase();
-
-        const linea = Number(esito.point);
-        const quota = Number(esito.price);
-
-        if (
-          nome === "over" &&
-          linea === 1.5 &&
-          Number.isFinite(quota) &&
-          quota > 1
-        ) {
-          quote.push(quota);
-        }
-      });
-
-    });
-
-  });
-
-  return quote;
-}
-
-function eliminaDuplicati(partite) {
-  const migliori = new Map();
-
-  partite.forEach(partita => {
-    const chiave =
-      partita.campionato +
-      "|" +
-      partita.nome +
-      "|" +
-      partita.ora;
-
-    const esistente = migliori.get(chiave);
-
-    if (
-      !esistente ||
-      partita.numeroQuote > esistente.numeroQuote
-    ) {
-      migliori.set(chiave, partita);
-    }
-  });
-
-  return Array.from(migliori.values());
-}
-
-function creaScheda(partita) {
   return `
-    <div class="card">
+    <article class="card">
 
       <div class="partita">
-        ${partita.nome}
+        ${pulisciTesto(partita.partita)}
       </div>
 
       <div class="dettagli">
 
-        <span class="badge">
-          🏆 ${partita.campionato}
+        <span class="etichetta">
+          🏆 ${pulisciTesto(partita.campionato)}
         </span>
 
-        <span class="badge">
-          🕒 ${partita.ora}
+        <span class="etichetta">
+          🕒 ${pulisciTesto(partita.ora)}
         </span>
 
       </div>
 
       <div class="pronostico">
-        Pronostico: Over 1.5
+        ✅ Pronostico: Over 1.5
       </div>
 
-      <div class="quota">
-        Quota media: ${partita.quotaMedia
-          .toFixed(2)
-          .replace(".", ",")}
+      <div class="riga-finale">
+
+        <div class="quota">
+          Quota ${quota}
+        </div>
+
+        <div class="affidabilita ${classe}">
+          ${affidabilita}
+        </div>
+
       </div>
 
-      <div class="affidabilita ${partita.affidabilita.classe}">
-        Affidabilità: ${partita.affidabilita.testo}
-      </div>
-
-    </div>
+    </article>
   `;
 }
 
-async function caricaPronostici() {
-  const risultatiDiv =
-    document.getElementById("risultati");
-
-  const statusDiv =
-    document.getElementById("status");
-
-  const pulsante =
-    document.getElementById("pulsanteAggiorna");
+function mostraPartite() {
+  const contenitore =
+    document.getElementById("listaPartite");
 
   const dataScelta =
     document.getElementById("dataScelta").value;
 
-  if (!dataScelta) {
-    risultatiDiv.innerHTML =
-      "<div class='errore'>" +
-      "Seleziona una data." +
-      "</div>";
+  const filtroAffidabilita =
+    document.getElementById(
+      "filtroAffidabilita"
+    ).value;
 
-    return;
-  }
+  const filtrate = tutteLePartite
+    .filter(partita => {
+      const stessaData =
+        partita.data === dataScelta;
 
-  if (
-    !API_KEY ||
-    API_KEY === "fbfc72a65736699d483a2c09ec4621c5"
-  ) {
-    risultatiDiv.innerHTML =
-      "<div class='errore'>" +
-      "Inserisci la tua API key nel codice." +
-      "</div>";
+      const quota =
+        normalizzaQuota(partita.quota);
 
-    return;
-  }
+      const quotaValida =
+        quota >= 1.30 &&
+        quota <= 1.50;
 
-  pulsante.disabled = true;
-  pulsante.textContent = "Ricerca in corso...";
+      const affidabilita =
+        String(
+          partita.affidabilita || ""
+        ).toUpperCase();
 
-  risultatiDiv.innerHTML =
-    "<div class='loading'>" +
-    "Analisi delle partite e delle quote Over 1.5..." +
-    "</div>";
+      const affidabilitaValida =
+        filtroAffidabilita === "TUTTE" ||
+        affidabilita === filtroAffidabilita;
 
-  statusDiv.innerHTML =
-    "Collegamento all’API e analisi dei campionati...";
-
-  let partiteAnalizzate = 0;
-  let partiteConOver15 = 0;
-  let pronostici = [];
-  let erroriAPI = [];
-
-  try {
-
-    for (const campionato of CAMPIONATI) {
-
-      const url =
-        "https://api.the-odds-api.com/v4/sports/" +
-        campionato.key +
-        "/odds/?" +
-        "apiKey=" +
-        encodeURIComponent(API_KEY) +
-        "&regions=uk,eu" +
-        "&markets=totals" +
-        "&oddsFormat=decimal" +
-        "&dateFormat=iso";
-
-      try {
-        const risposta = await fetch(url);
-
-        const dati = await risposta.json();
-
-        if (!risposta.ok) {
-          const messaggio =
-            dati.message ||
-            dati.error ||
-            "Errore API";
-
-          erroriAPI.push(
-            campionato.nome +
-            ": " +
-            messaggio
-          );
-
-          continue;
-        }
-
-        if (!Array.isArray(dati)) {
-          continue;
-        }
-
-        partiteAnalizzate += dati.length;
-
-        dati.forEach(partita => {
-
-          const dataPartita =
-            dataLocaleFormatoISO(
-              partita.commence_time
-            );
-
-          if (dataPartita !== dataScelta) {
-            return;
-          }
-
-          const quoteOver15 =
-            estraiQuoteOver15(partita);
-
-          if (quoteOver15.length > 0) {
-            partiteConOver15++;
-          }
-
-          if (
-            quoteOver15.length <
-            NUMERO_MINIMO_QUOTE
-          ) {
-            return;
-          }
-
-          const quotaMedia =
-            calcolaMedia(quoteOver15);
-
-          if (
-            quotaMedia < QUOTA_MINIMA ||
-            quotaMedia > QUOTA_MASSIMA
-          ) {
-            return;
-          }
-
-          const differenzaQuote =
-            calcolaDifferenzaQuote(
-              quoteOver15
-            );
-
-          const affidabilita =
-            calcolaAffidabilita(
-              quotaMedia,
-              quoteOver15.length,
-              differenzaQuote
-            );
-
-          pronostici.push({
-            nome:
-              partita.home_team +
-              " - " +
-              partita.away_team,
-
-            campionato:
-              campionato.nome,
-
-            ora:
-              formattaOra(
-                partita.commence_time
-              ),
-
-            quotaMedia:
-              quotaMedia,
-
-            numeroQuote:
-              quoteOver15.length,
-
-            affidabilita:
-              affidabilita
-          });
-
-        });
-
-      } catch (erroreCampionato) {
-        erroriAPI.push(
-          campionato.nome +
-          ": errore di collegamento"
-        );
+      return (
+        stessaData &&
+        quotaValida &&
+        affidabilitaValida
+      );
+    })
+    .sort((a, b) => {
+      if (a.ora !== b.ora) {
+        return a.ora.localeCompare(b.ora);
       }
-    }
 
-    pronostici =
-      eliminaDuplicati(pronostici);
+      return (
+        normalizzaQuota(a.quota) -
+        normalizzaQuota(b.quota)
+      );
+    });
 
-    pronostici.sort(
-      (a, b) =>
-        a.quotaMedia - b.quotaMedia
+  document.getElementById(
+    "contatore"
+  ).textContent =
+    filtrate.length +
+    (filtrate.length === 1
+      ? " partita"
+      : " partite");
+
+  if (filtrate.length === 0) {
+    contenitore.innerHTML = `
+      <div class="vuoto">
+        <strong>Nessuna selezione trovata.</strong>
+        <br><br>
+        Per questa data non risultano partite
+        Over 1.5 con quota compresa tra
+        1,30 e 1,50.
+      </div>
+    `;
+
+    return;
+  }
+
+  contenitore.innerHTML =
+    filtrate.map(creaCard).join("");
+}
+
+async function caricaPartite() {
+  const pulsante =
+    document.getElementById(
+      "pulsanteAggiorna"
     );
 
-    statusDiv.innerHTML =
-      "Partite lette dall’API: " +
-      partiteAnalizzate +
-      "<br>" +
-      "Partite del giorno con linea Over 1.5: " +
-      partiteConOver15 +
-      "<br>" +
-      "Pronostici selezionati: " +
-      pronostici.length;
+  const stato =
+    document.getElementById("stato");
 
-    if (pronostici.length === 0) {
-      risultatiDiv.innerHTML =
-        "<div class='nessun-risultato'>" +
-        "<strong>Nessun pronostico trovato.</strong><br><br>" +
-        "Per la data selezionata non risultano partite " +
-        "con almeno due quote Over 1.5 e quota media " +
-        "compresa tra 1,30 e 1,50.<br><br>" +
-        "Il riquadro informativo indica anche quante " +
-        "partite con linea Over 1.5 sono state trovate." +
-        "</div>";
-    } else {
-      risultatiDiv.innerHTML =
-        pronostici
-          .map(creaScheda)
-          .join("");
+  const contenitore =
+    document.getElementById(
+      "listaPartite"
+    );
+
+  pulsante.disabled = true;
+
+  pulsante.textContent =
+    "Caricamento...";
+
+  stato.textContent =
+    "Lettura del file partite.json.";
+
+  contenitore.innerHTML = `
+    <div class="caricamento">
+      Aggiornamento delle partite...
+    </div>
+  `;
+
+  try {
+    const risposta = await fetch(
+      FILE_PARTITE + "?v=" + Date.now(),
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!risposta.ok) {
+      throw new Error(
+        "File partite.json non trovato"
+      );
     }
 
-    if (
-      erroriAPI.length > 0 &&
-      partiteAnalizzate === 0
-    ) {
-      statusDiv.innerHTML +=
-        "<br>Possibili limitazioni della chiave API.";
+    const dati = await risposta.json();
+
+    if (!Array.isArray(dati)) {
+      throw new Error(
+        "Il contenuto di partite.json non è valido"
+      );
     }
+
+    tutteLePartite = dati;
+
+    stato.textContent =
+      "Dati caricati correttamente.";
+
+    document.getElementById(
+      "ultimoAggiornamento"
+    ).textContent =
+      "Ultimo caricamento: " +
+      new Date().toLocaleString("it-IT");
+
+    mostraPartite();
 
   } catch (errore) {
+    tutteLePartite = [];
 
-    risultatiDiv.innerHTML =
-      "<div class='errore'>" +
-      "<strong>Errore nel caricamento.</strong><br>" +
-      "Controlla la chiave API e i crediti disponibili." +
-      "</div>";
+    stato.textContent =
+      "Errore durante il caricamento.";
 
-    statusDiv.innerHTML =
-      "Errore tecnico durante l’analisi.";
+    contenitore.innerHTML = `
+      <div class="errore">
+        <strong>Impossibile caricare le partite.</strong>
+        <br><br>
+        Verifica che il file
+        <strong>partite.json</strong>
+        sia presente nello stesso repository
+        di index.html.
+        <br><br>
+        Dettaglio: ${pulisciTesto(errore.message)}
+      </div>
+    `;
 
-    console.error(errore);
+    document.getElementById(
+      "contatore"
+    ).textContent = "0 partite";
 
   } finally {
-
     pulsante.disabled = false;
 
     pulsante.textContent =
-      "🔄 Cerca pronostici";
+      "🔄 Aggiorna partite";
   }
 }
 
-impostaDataOggi();
+document.getElementById(
+  "dataScelta"
+).value = dataOggi();
 
-document
-  .getElementById("dataScelta")
-  .addEventListener(
-    "change",
-    caricaPronostici
-  );
+document.getElementById(
+  "pulsanteAggiorna"
+).addEventListener(
+  "click",
+  caricaPartite
+);
 
-caricaPronostici();
+document.getElementById(
+  "dataScelta"
+).addEventListener(
+  "change",
+  mostraPartite
+);
+
+document.getElementById(
+  "filtroAffidabilita"
+).addEventListener(
+  "change",
+  mostraPartite
+);
+
+caricaPartite();
 </script>
 
 </body>
