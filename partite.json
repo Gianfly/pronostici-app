@@ -1,34 +1,26 @@
 [
   {
-    "data": "2026-09-02",
-    "partita": "St. Truiden - Union St. Gilloise",
-    "campionato": "Belgium Jupiler Pro League",
-    "ora": "18:30",
-    "quota": 1.35,
-    "affidabilita": "ALTA"
-  },
-  {
-    "data": "2026-09-02",
-    "partita": "Macara - Manta FC",
-    "campionato": "Ecuador Liga Pro",
-    "ora": "19:00",
-    "quota": 1.33,
-    "affidabilita": "ALTA"
-  },
-  {
-    "data": "2026-09-02",
-    "partita": "Deportivo Cuenca - Guayaquil City",
-    "campionato": "Ecuador Liga Pro",
-    "ora": "21:30",
-    "quota": 1.40,
+    "data": "2026-09-03",
+    "partita": "Juventus - Parma",
+    "campionato": "Serie A",
+    "ora": "20:45",
+    "casa_over15": 5,
+    "ospite_over15": 4,
+    "media_casa": 2.8,
+    "media_ospite": 3.1,
+    "score": 10,
     "affidabilita": "BUONA"
   },
   {
     "data": "2026-09-03",
-    "partita": "Squadra Casa - Squadra Ospite",
-    "campionato": "Campionato di esempio",
-    "ora": "20:45",
-    "quota": 1.47,
-    "affidabilita": "DISCRETA"
+    "partita": "Arsenal - Fulham",
+    "campionato": "Premier League",
+    "ora": "18:30",
+    "casa_over15": 5,
+    "ospite_over15": 5,
+    "media_casa": 3.4,
+    "media_ospite": 2.9,
+    "score": 12,
+    "affidabilita": "ALTA"
   }
 ]
