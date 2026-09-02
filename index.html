@@ -54,6 +54,20 @@ body{
     font-size:12px;
 }
 
+.filtri{
+    margin-bottom:20px;
+}
+
+select{
+    width:100%;
+    padding:12px;
+    border-radius:12px;
+    border:none;
+    background:#1e293b;
+    color:white;
+    font-size:16px;
+}
+
 .card{
     background:#1e293b;
     border-left:6px solid #22c55e;
@@ -100,11 +114,8 @@ body{
 <body>
 
 <div class="header">
-
 <h1>⚽ OVER 1.5 PREDICTOR</h1>
-
 <p>Algoritmo V1.0</p>
-
 </div>
 
 <div class="stats">
@@ -126,29 +137,31 @@ body{
 
 </div>
 
+<div class="filtri">
+
+<select id="filtroCampionato">
+
+<option value="TUTTI">
+🏆 Tutti i campionati
+</option>
+
+</select>
+
+</div>
+
 <div id="lista"></div>
 
 <script>
 
-fetch("partite.json?v="+Date.now())
-.then(r=>r.json())
-.then(dati=>{
+let tutteLePartite=[];
 
-let alta=0;
-let buona=0;
+function renderPartite(dati){
 
-document.getElementById("totale").innerText=dati.length;
+dati.sort((a,b)=>b.score-a.score);
 
 let html="";
 
 dati.forEach(p=>{
-
-if(p.affidabilita==="ALTA") alta++;
-
-if(
-p.affidabilita==="ALTA" ||
-p.affidabilita==="BUONA"
-) buona++;
 
 html+=`
 
@@ -196,10 +209,107 @@ ${p.partita}
 
 });
 
-document.getElementById("alta").innerText=alta;
-document.getElementById("buona").innerText=buona;
+document.getElementById(
+"lista"
+).innerHTML=html;
 
-document.getElementById("lista").innerHTML=html;
+}
+
+fetch("partite.json?v="+Date.now())
+
+.then(r=>r.json())
+
+.then(dati=>{
+
+tutteLePartite=dati;
+
+let alta=0;
+let buona=0;
+
+document.getElementById(
+"totale"
+).innerText=dati.length;
+
+dati.forEach(p=>{
+
+if(
+p.affidabilita==="ALTA"
+) alta++;
+
+if(
+p.affidabilita==="ALTA" ||
+p.affidabilita==="BUONA"
+) buona++;
+
+});
+
+document.getElementById(
+"alta"
+).innerText=alta;
+
+document.getElementById(
+"buona"
+).innerText=buona;
+
+const select=
+document.getElementById(
+"filtroCampionato"
+);
+
+const campionati=[
+...new Set(
+dati.map(
+p=>p.campionato
+)
+)
+];
+
+campionati.sort();
+
+campionati.forEach(c=>{
+
+const option=
+document.createElement("option");
+
+option.value=c;
+
+option.textContent=c;
+
+select.appendChild(option);
+
+});
+
+renderPartite(dati);
+
+select.addEventListener(
+"change",
+()=>{
+
+const valore=select.value;
+
+if(
+valore==="TUTTI"
+){
+
+renderPartite(
+tutteLePartite
+);
+
+return;
+
+}
+
+renderPartite(
+
+tutteLePartite.filter(
+p=>p.campionato===valore
+)
+
+);
+
+}
+
+);
 
 });
 
