@@ -35,6 +35,12 @@ jobs:
         run: |
           python aggiorna_partite.py
 
+          - name: Upload HTML
+  uses: actions/upload-artifact@v4
+  with:
+    name: pagina-html
+    path: pagina.html
+
       - name: Controlla JSON
         run: |
           python -m json.tool partite.json > /dev/null
