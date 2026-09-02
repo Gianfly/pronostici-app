@@ -1,0 +1,34 @@
+[
+  {
+    "data": "2026-09-02",
+    "partita": "St. Truiden - Union St. Gilloise",
+    "campionato": "Belgium Jupiler Pro League",
+    "ora": "18:30",
+    "quota": 1.35,
+    "affidabilita": "ALTA"
+  },
+  {
+    "data": "2026-09-02",
+    "partita": "Macara - Manta FC",
+    "campionato": "Ecuador Liga Pro",
+    "ora": "19:00",
+    "quota": 1.33,
+    "affidabilita": "ALTA"
+  },
+  {
+    "data": "2026-09-02",
+    "partita": "Deportivo Cuenca - Guayaquil City",
+    "campionato": "Ecuador Liga Pro",
+    "ora": "21:30",
+    "quota": 1.40,
+    "affidabilita": "BUONA"
+  },
+  {
+    "data": "2026-09-03",
+    "partita": "Squadra Casa - Squadra Ospite",
+    "campionato": "Campionato di esempio",
+    "ora": "20:45",
+    "quota": 1.47,
+    "affidabilita": "DISCRETA"
+  }
+]
