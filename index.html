@@ -2,354 +2,822 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pronostici Calcio</title>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Pronostici Over 1.5</title>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0;
+  padding: 18px;
   font-family: Arial, sans-serif;
-  background: #111827;
+  background:
+    linear-gradient(
+      180deg,
+      #020617 0%,
+      #111827 100%
+    );
   color: white;
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 850px;
+  margin: 0 auto;
 }
 
 h1 {
   text-align: center;
+  margin: 10px 0 6px;
   font-size: 28px;
-  margin-bottom: 20px;
 }
 
-h2 {
-  margin-top: 30px;
-  font-size: 22px;
+.subtitle {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
 }
 
 .controls {
   background: #1f2937;
-  padding: 15px;
-  border-radius: 12px;
+  border: 1px solid #374151;
+  border-radius: 16px;
+  padding: 16px;
   margin-bottom: 20px;
 }
 
 label {
   display: block;
-  margin-bottom: 8px;
   font-weight: bold;
+  margin-bottom: 8px;
 }
 
 input[type="date"] {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 13px;
   border: none;
-  font-size: 16px;
+  border-radius: 10px;
   margin-bottom: 12px;
+  font-size: 17px;
+  background: white;
+  color: #111827;
 }
 
 button {
   width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
   background: #2563eb;
   color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 10px;
-  font-size: 16px;
+  font-size: 17px;
+  font-weight: bold;
   cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+.regole {
+  margin-top: 12px;
+  padding: 11px;
+  background: #111827;
+  border-radius: 10px;
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.status {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 18px;
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.risultati-titolo {
+  margin: 25px 0 12px;
+  font-size: 21px;
 }
 
 .card {
   background: #1f2937;
-  margin: 12px 0;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-}
-
-.over {
+  border: 1px solid #374151;
   border-left: 6px solid #22c55e;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 13px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
 }
 
-.under {
-  border-left: 6px solid #ef4444;
+.partita {
+  font-size: 19px;
+  font-weight: bold;
+  line-height: 1.35;
 }
 
-.match {
+.dettagli {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.badge {
+  display: inline-block;
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 999px;
+  padding: 6px 9px;
+  color: #d1d5db;
+  font-size: 13px;
+}
+
+.pronostico {
+  color: #4ade80;
   font-size: 18px;
   font-weight: bold;
-}
-
-.info {
-  color: #d1d5db;
-  font-size: 14px;
-  margin-top: 5px;
+  margin-top: 13px;
 }
 
 .quota {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
   margin-top: 8px;
 }
 
+.affidabilita {
+  display: inline-block;
+  margin-top: 9px;
+  padding: 7px 11px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.alta {
+  background: #14532d;
+  color: #bbf7d0;
+}
+
+.buona {
+  background: #1e3a8a;
+  color: #bfdbfe;
+}
+
+.discreta {
+  background: #854d0e;
+  color: #fef08a;
+}
+
 .loading {
   color: #facc15;
-  margin-top: 10px;
+  padding: 15px 0;
 }
 
-.error {
-  color: #f87171;
-  margin-top: 10px;
+.nessun-risultato {
+  background: #1f2937;
+  border: 1px dashed #64748b;
+  border-radius: 14px;
+  padding: 17px;
+  color: #cbd5e1;
+  line-height: 1.6;
 }
 
-.debug {
-  background: #374151;
-  color: #e5e7eb;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 13px;
-  margin-top: 10px;
-  line-height: 1.4;
+.errore {
+  background: #450a0a;
+  border: 1px solid #991b1b;
+  border-radius: 14px;
+  padding: 17px;
+  color: #fecaca;
+  line-height: 1.6;
 }
 
-.note {
-  color: #9ca3af;
-  font-size: 13px;
-  margin-top: 10px;
-  line-height: 1.4;
+.avviso {
+  margin-top: 20px;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
 }
 </style>
 </head>
 
 <body>
 
-<h1>⚽ Pronostici Calcio</h1>
+<div class="container">
 
-<div class="controls">
-  <label for="dataScelta">Scegli il giorno</label>
-  <input type="date" id="dataScelta">
+  <h1>⚽ Pronostici Over 1.5</h1>
 
-  <button onclick="caricaDati()">🔄 Aggiorna</button>
-
-  <div class="note">
-    Mostra solo Over 2.5 e Under 2.5 del giorno selezionato.<br>
-    Range quota: da 1.40 a 1.75.
+  <div class="subtitle">
+    Selezione automatica delle partite con quota media
+    Over 1.5 compresa tra 1,30 e 1,50.
   </div>
 
-  <div id="debug" class="debug">Pronto.</div>
+  <div class="controls">
+
+    <label for="dataScelta">
+      📅 Scegli il giorno
+    </label>
+
+    <input
+      type="date"
+      id="dataScelta"
+    >
+
+    <button
+      id="pulsanteAggiorna"
+      onclick="caricaPronostici()"
+    >
+      🔄 Cerca pronostici
+    </button>
+
+    <div class="regole">
+      <strong>Regole dell’algoritmo</strong><br>
+      Quota media minima: 1,30<br>
+      Quota media massima: 1,50<br>
+      Numero minimo di quote disponibili: 2<br>
+      Visualizzazione: partita, ora, campionato,
+      affidabilità e quota media
+    </div>
+
+  </div>
+
+  <div id="status" class="status">
+    Pronto per la ricerca.
+  </div>
+
+  <h2 class="risultati-titolo">
+    🟢 Partite selezionate
+  </h2>
+
+  <div id="risultati">
+    Seleziona una data e premi “Cerca pronostici”.
+  </div>
+
+  <div class="avviso">
+    Le indicazioni sono ricavate dalle quote disponibili
+    e non garantiscono il risultato della partita.
+  </div>
+
 </div>
 
-<h2>🟢 Over 2.5</h2>
-<div id="over">Caricamento...</div>
-
-<h2>🔴 Under 2.5</h2>
-<div id="under">Caricamento...</div>
-
 <script>
-const API_KEY = "fbfc72a65736699d483a2c09ec4621c5";
+const API_KEY = "INCOLLA_QUI_LA_TUA_API_KEY";
 
+/*
+  Inserisci qui le competizioni che vuoi analizzare.
+  Le competizioni non disponibili per il tuo piano
+  vengono semplicemente ignorate.
+*/
 const CAMPIONATI = [
-  { key: "soccer_epl", nome: "Premier League" },
-  { key: "soccer_italy_serie_a", nome: "Serie A" },
-  { key: "soccer_spain_la_liga", nome: "La Liga" },
-  { key: "soccer_germany_bundesliga", nome: "Bundesliga" },
-  { key: "soccer_france_ligue_one", nome: "Ligue 1" },
-  { key: "soccer_uefa_champs_league", nome: "Champions League" },
-  { key: "soccer_uefa_europa_league", nome: "Europa League" }
+  {
+    key: "soccer_italy_serie_a",
+    nome: "Serie A"
+  },
+  {
+    key: "soccer_italy_serie_b",
+    nome: "Serie B"
+  },
+  {
+    key: "soccer_epl",
+    nome: "Premier League"
+  },
+  {
+    key: "soccer_efl_champ",
+    nome: "Championship"
+  },
+  {
+    key: "soccer_spain_la_liga",
+    nome: "La Liga"
+  },
+  {
+    key: "soccer_germany_bundesliga",
+    nome: "Bundesliga"
+  },
+  {
+    key: "soccer_france_ligue_one",
+    nome: "Ligue 1"
+  },
+  {
+    key: "soccer_netherlands_eredivisie",
+    nome: "Eredivisie"
+  },
+  {
+    key: "soccer_portugal_primeira_liga",
+    nome: "Primeira Liga"
+  },
+  {
+    key: "soccer_uefa_champs_league",
+    nome: "Champions League"
+  },
+  {
+    key: "soccer_uefa_europa_league",
+    nome: "Europa League"
+  }
 ];
 
-const QUOTA_MINIMA = 1.40;
-const QUOTA_MASSIMA = 1.75;
+const QUOTA_MINIMA = 1.30;
+const QUOTA_MASSIMA = 1.50;
+const NUMERO_MINIMO_QUOTE = 2;
 
 function impostaDataOggi() {
-  const input = document.getElementById("dataScelta");
   const oggi = new Date();
 
   const anno = oggi.getFullYear();
-  const mese = String(oggi.getMonth() + 1).padStart(2, "0");
-  const giorno = String(oggi.getDate()).padStart(2, "0");
+  const mese = String(
+    oggi.getMonth() + 1
+  ).padStart(2, "0");
 
-  input.value = anno + "-" + mese + "-" + giorno;
+  const giorno = String(
+    oggi.getDate()
+  ).padStart(2, "0");
+
+  document.getElementById("dataScelta").value =
+    anno + "-" + mese + "-" + giorno;
 }
 
-function dataLocaleDaISO(dataISO) {
+function dataLocaleFormatoISO(dataISO) {
   const data = new Date(dataISO);
 
   const anno = data.getFullYear();
-  const mese = String(data.getMonth() + 1).padStart(2, "0");
-  const giorno = String(data.getDate()).padStart(2, "0");
+
+  const mese = String(
+    data.getMonth() + 1
+  ).padStart(2, "0");
+
+  const giorno = String(
+    data.getDate()
+  ).padStart(2, "0");
 
   return anno + "-" + mese + "-" + giorno;
 }
 
-function oraLocale(dataISO) {
-  return new Date(dataISO).toLocaleString("it-IT");
+function formattaOra(dataISO) {
+  return new Date(dataISO).toLocaleTimeString(
+    "it-IT",
+    {
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
 }
 
-function probabilitaDaQuota(quota) {
-  return Math.round((1 / quota) * 100);
+function arrotondaQuota(numero) {
+  return Math.round(numero * 100) / 100;
 }
 
-function quotaNelRange(quota) {
-  return quota >= QUOTA_MINIMA && quota <= QUOTA_MASSIMA;
+function calcolaMedia(valori) {
+  if (!valori.length) {
+    return 0;
+  }
+
+  const totale = valori.reduce(
+    (somma, valore) => somma + valore,
+    0
+  );
+
+  return arrotondaQuota(
+    totale / valori.length
+  );
 }
 
-async function caricaDati() {
-  const overDiv = document.getElementById("over");
-  const underDiv = document.getElementById("under");
-  const debugDiv = document.getElementById("debug");
-  const dataScelta = document.getElementById("dataScelta").value;
+function calcolaDifferenzaQuote(valori) {
+  if (!valori.length) {
+    return 0;
+  }
 
-  overDiv.innerHTML = "<div class='loading'>Caricamento Over 2.5...</div>";
-  underDiv.innerHTML = "<div class='loading'>Caricamento Under 2.5...</div>";
-  debugDiv.innerHTML = "Caricamento dati API...";
+  const minima = Math.min(...valori);
+  const massima = Math.max(...valori);
 
-  let overList = [];
-  let underList = [];
-  let partiteTotaliLette = 0;
-  let partiteDelGiorno = 0;
-  let mercatiTotalsTrovati = 0;
+  return arrotondaQuota(
+    massima - minima
+  );
+}
+
+function calcolaAffidabilita(
+  quotaMedia,
+  numeroQuote,
+  differenzaQuote
+) {
+  /*
+    Il livello è un indicatore interno:
+    quota più bassa, più fonti e minore
+    differenza tra le quote aumentano
+    il livello visualizzato.
+  */
+
+  if (
+    quotaMedia >= 1.30 &&
+    quotaMedia <= 1.36 &&
+    numeroQuote >= 3 &&
+    differenzaQuote <= 0.20
+  ) {
+    return {
+      testo: "ALTA",
+      classe: "alta"
+    };
+  }
+
+  if (
+    quotaMedia >= 1.30 &&
+    quotaMedia <= 1.43 &&
+    numeroQuote >= 2 &&
+    differenzaQuote <= 0.30
+  ) {
+    return {
+      testo: "BUONA",
+      classe: "buona"
+    };
+  }
+
+  return {
+    testo: "DISCRETA",
+    classe: "discreta"
+  };
+}
+
+function estraiQuoteOver15(partita) {
+  const quote = [];
+
+  if (
+    !partita.bookmakers ||
+    !Array.isArray(partita.bookmakers)
+  ) {
+    return quote;
+  }
+
+  partita.bookmakers.forEach(bookmaker => {
+
+    if (
+      !bookmaker.markets ||
+      !Array.isArray(bookmaker.markets)
+    ) {
+      return;
+    }
+
+    bookmaker.markets.forEach(mercato => {
+
+      if (mercato.key !== "totals") {
+        return;
+      }
+
+      if (
+        !mercato.outcomes ||
+        !Array.isArray(mercato.outcomes)
+      ) {
+        return;
+      }
+
+      mercato.outcomes.forEach(esito => {
+        const nome = String(
+          esito.name || ""
+        ).toLowerCase();
+
+        const linea = Number(esito.point);
+        const quota = Number(esito.price);
+
+        if (
+          nome === "over" &&
+          linea === 1.5 &&
+          Number.isFinite(quota) &&
+          quota > 1
+        ) {
+          quote.push(quota);
+        }
+      });
+
+    });
+
+  });
+
+  return quote;
+}
+
+function eliminaDuplicati(partite) {
+  const migliori = new Map();
+
+  partite.forEach(partita => {
+    const chiave =
+      partita.campionato +
+      "|" +
+      partita.nome +
+      "|" +
+      partita.ora;
+
+    const esistente = migliori.get(chiave);
+
+    if (
+      !esistente ||
+      partita.numeroQuote > esistente.numeroQuote
+    ) {
+      migliori.set(chiave, partita);
+    }
+  });
+
+  return Array.from(migliori.values());
+}
+
+function creaScheda(partita) {
+  return `
+    <div class="card">
+
+      <div class="partita">
+        ${partita.nome}
+      </div>
+
+      <div class="dettagli">
+
+        <span class="badge">
+          🏆 ${partita.campionato}
+        </span>
+
+        <span class="badge">
+          🕒 ${partita.ora}
+        </span>
+
+      </div>
+
+      <div class="pronostico">
+        Pronostico: Over 1.5
+      </div>
+
+      <div class="quota">
+        Quota media: ${partita.quotaMedia
+          .toFixed(2)
+          .replace(".", ",")}
+      </div>
+
+      <div class="affidabilita ${partita.affidabilita.classe}">
+        Affidabilità: ${partita.affidabilita.testo}
+      </div>
+
+    </div>
+  `;
+}
+
+async function caricaPronostici() {
+  const risultatiDiv =
+    document.getElementById("risultati");
+
+  const statusDiv =
+    document.getElementById("status");
+
+  const pulsante =
+    document.getElementById("pulsanteAggiorna");
+
+  const dataScelta =
+    document.getElementById("dataScelta").value;
+
+  if (!dataScelta) {
+    risultatiDiv.innerHTML =
+      "<div class='errore'>" +
+      "Seleziona una data." +
+      "</div>";
+
+    return;
+  }
+
+  if (
+    !API_KEY ||
+    API_KEY === "fbfc72a65736699d483a2c09ec4621c5"
+  ) {
+    risultatiDiv.innerHTML =
+      "<div class='errore'>" +
+      "Inserisci la tua API key nel codice." +
+      "</div>";
+
+    return;
+  }
+
+  pulsante.disabled = true;
+  pulsante.textContent = "Ricerca in corso...";
+
+  risultatiDiv.innerHTML =
+    "<div class='loading'>" +
+    "Analisi delle partite e delle quote Over 1.5..." +
+    "</div>";
+
+  statusDiv.innerHTML =
+    "Collegamento all’API e analisi dei campionati...";
+
+  let partiteAnalizzate = 0;
+  let partiteConOver15 = 0;
+  let pronostici = [];
+  let erroriAPI = [];
 
   try {
+
     for (const campionato of CAMPIONATI) {
+
       const url =
         "https://api.the-odds-api.com/v4/sports/" +
         campionato.key +
         "/odds/?" +
-        "apiKey=" + API_KEY +
+        "apiKey=" +
+        encodeURIComponent(API_KEY) +
         "&regions=uk,eu" +
         "&markets=totals" +
         "&oddsFormat=decimal" +
         "&dateFormat=iso";
 
-      const response = await fetch(url);
-      const data = await response.json();
+      try {
+        const risposta = await fetch(url);
 
-      if (!Array.isArray(data)) {
-        console.log("Risposta non valida per", campionato.nome, data);
-        continue;
-      }
+        const dati = await risposta.json();
 
-      partiteTotaliLette += data.length;
+        if (!risposta.ok) {
+          const messaggio =
+            dati.message ||
+            dati.error ||
+            "Errore API";
 
-      data.forEach(partita => {
-        const dataPartitaLocale = dataLocaleDaISO(partita.commence_time);
+          erroriAPI.push(
+            campionato.nome +
+            ": " +
+            messaggio
+          );
 
-        if (dataPartitaLocale !== dataScelta) {
-          return;
+          continue;
         }
 
-        partiteDelGiorno++;
+        if (!Array.isArray(dati)) {
+          continue;
+        }
 
-        const nomePartita = partita.home_team + " - " + partita.away_team;
-        const dataOra = oraLocale(partita.commence_time);
+        partiteAnalizzate += dati.length;
 
-        if (!partita.bookmakers || partita.bookmakers.length === 0) return;
+        dati.forEach(partita => {
 
-        partita.bookmakers.forEach(bookmaker => {
-          if (!bookmaker.markets) return;
+          const dataPartita =
+            dataLocaleFormatoISO(
+              partita.commence_time
+            );
 
-          bookmaker.markets.forEach(market => {
-            if (market.key !== "totals") return;
+          if (dataPartita !== dataScelta) {
+            return;
+          }
 
-            mercatiTotalsTrovati++;
+          const quoteOver15 =
+            estraiQuoteOver15(partita);
 
-            market.outcomes.forEach(outcome => {
-              const quota = Number(outcome.price);
-              const linea = Number(outcome.point);
+          if (quoteOver15.length > 0) {
+            partiteConOver15++;
+          }
 
-              if (!quota || !linea) return;
+          if (
+            quoteOver15.length <
+            NUMERO_MINIMO_QUOTE
+          ) {
+            return;
+          }
 
-              if (
-                outcome.name === "Over" &&
-                linea === 2.5 &&
-                quotaNelRange(quota)
-              ) {
-                overList.push({
-                  partita: nomePartita,
-                  campionato: campionato.nome,
-                  ora: dataOra,
-                  quota: quota,
-                  bookmaker: bookmaker.title,
-                  probabilita: probabilitaDaQuota(quota)
-                });
-              }
+          const quotaMedia =
+            calcolaMedia(quoteOver15);
 
-              if (
-                outcome.name === "Under" &&
-                linea === 2.5 &&
-                quotaNelRange(quota)
-              ) {
-                underList.push({
-                  partita: nomePartita,
-                  campionato: campionato.nome,
-                  ora: dataOra,
-                  quota: quota,
-                  bookmaker: bookmaker.title,
-                  probabilita: probabilitaDaQuota(quota)
-                });
-              }
-            });
+          if (
+            quotaMedia < QUOTA_MINIMA ||
+            quotaMedia > QUOTA_MASSIMA
+          ) {
+            return;
+          }
+
+          const differenzaQuote =
+            calcolaDifferenzaQuote(
+              quoteOver15
+            );
+
+          const affidabilita =
+            calcolaAffidabilita(
+              quotaMedia,
+              quoteOver15.length,
+              differenzaQuote
+            );
+
+          pronostici.push({
+            nome:
+              partita.home_team +
+              " - " +
+              partita.away_team,
+
+            campionato:
+              campionato.nome,
+
+            ora:
+              formattaOra(
+                partita.commence_time
+              ),
+
+            quotaMedia:
+              quotaMedia,
+
+            numeroQuote:
+              quoteOver15.length,
+
+            affidabilita:
+              affidabilita
           });
+
         });
-      });
+
+      } catch (erroreCampionato) {
+        erroriAPI.push(
+          campionato.nome +
+          ": errore di collegamento"
+        );
+      }
     }
 
-    overList.sort((a, b) => a.quota - b.quota);
-    underList.sort((a, b) => a.quota - b.quota);
+    pronostici =
+      eliminaDuplicati(pronostici);
 
-    debugDiv.innerHTML =
-      "Partite totali lette dall'API: " + partiteTotaliLette + "<br>" +
-      "Partite nel giorno selezionato: " + partiteDelGiorno + "<br>" +
-      "Mercati Over/Under trovati: " + mercatiTotalsTrovati + "<br>" +
-      "Range quote applicato: " + QUOTA_MINIMA + " - " + QUOTA_MASSIMA;
+    pronostici.sort(
+      (a, b) =>
+        a.quotaMedia - b.quotaMedia
+    );
 
-    overDiv.innerHTML = overList.length
-      ? overList.map(creaCardOver).join("")
-      : "<div class='error'>Nessun Over 2.5 trovato per questa data con quota da " + QUOTA_MINIMA + " a " + QUOTA_MASSIMA + "</div>";
+    statusDiv.innerHTML =
+      "Partite lette dall’API: " +
+      partiteAnalizzate +
+      "<br>" +
+      "Partite del giorno con linea Over 1.5: " +
+      partiteConOver15 +
+      "<br>" +
+      "Pronostici selezionati: " +
+      pronostici.length;
 
-    underDiv.innerHTML = underList.length
-      ? underList.map(creaCardUnder).join("")
-      : "<div class='error'>Nessun Under 2.5 trovato per questa data con quota da " + QUOTA_MINIMA + " a " + QUOTA_MASSIMA + "</div>";
+    if (pronostici.length === 0) {
+      risultatiDiv.innerHTML =
+        "<div class='nessun-risultato'>" +
+        "<strong>Nessun pronostico trovato.</strong><br><br>" +
+        "Per la data selezionata non risultano partite " +
+        "con almeno due quote Over 1.5 e quota media " +
+        "compresa tra 1,30 e 1,50.<br><br>" +
+        "Il riquadro informativo indica anche quante " +
+        "partite con linea Over 1.5 sono state trovate." +
+        "</div>";
+    } else {
+      risultatiDiv.innerHTML =
+        pronostici
+          .map(creaScheda)
+          .join("");
+    }
+
+    if (
+      erroriAPI.length > 0 &&
+      partiteAnalizzate === 0
+    ) {
+      statusDiv.innerHTML +=
+        "<br>Possibili limitazioni della chiave API.";
+    }
 
   } catch (errore) {
-    overDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
-    underDiv.innerHTML = "<div class='error'>Errore nel caricamento API.</div>";
-    debugDiv.innerHTML = "Errore tecnico nel caricamento. Controlla API key o console browser.";
-    console.log(errore);
+
+    risultatiDiv.innerHTML =
+      "<div class='errore'>" +
+      "<strong>Errore nel caricamento.</strong><br>" +
+      "Controlla la chiave API e i crediti disponibili." +
+      "</div>";
+
+    statusDiv.innerHTML =
+      "Errore tecnico durante l’analisi.";
+
+    console.error(errore);
+
+  } finally {
+
+    pulsante.disabled = false;
+
+    pulsante.textContent =
+      "🔄 Cerca pronostici";
   }
 }
 
-function creaCardOver(x) {
-  return `
-    <div class="card over">
-      <div class="match">${x.partita}</div>
-      <div class="info">${x.campionato}</div>
-      <div class="info">${x.ora}</div>
-      <div class="quota">Over 2.5 @ ${x.quota}</div>
-      <div class="info">Probabilità stimata: ${x.probabilita}%</div>
-      <div class="info">Bookmaker: ${x.bookmaker}</div>
-    </div>
-  `;
-}
-
-function creaCardUnder(x) {
-  return `
-    <div class="card under">
-      <div class="match">${x.partita}</div>
-      <div class="info">${x.campionato}</div>
-      <div class="info">${x.ora}</div>
-      <div class="quota">Under 2.5 @ ${x.quota}</div>
-      <div class="info">Probabilità stimata: ${x.probabilita}%</div>
-      <div class="info">Bookmaker: ${x.bookmaker}</div>
-    </div>
-  `;
-}
-
 impostaDataOggi();
-caricaDati();
 
-document.getElementById("dataScelta").addEventListener("change", caricaDati);
+document
+  .getElementById("dataScelta")
+  .addEventListener(
+    "change",
+    caricaPronostici
+  );
+
+caricaPronostici();
 </script>
 
 </body>
