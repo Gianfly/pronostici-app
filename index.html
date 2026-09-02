@@ -2,11 +2,8 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <meta name="theme-color" content="#07111f">
 
@@ -15,17 +12,15 @@
 <style>
 :root {
   --sfondo: #07111f;
-  --sfondo-secondario: #0f1d30;
-  --scheda: #162438;
-  --bordo: #29394f;
+  --pannello: #0f1d30;
+  --card: #162438;
+  --bordo: #2b3d55;
   --testo: #f8fafc;
-  --testo-secondario: #a8b5c7;
+  --secondario: #a8b5c7;
   --verde: #22c55e;
-  --verde-scuro: #14532d;
   --blu: #2563eb;
+  --rosso: #ef4444;
   --giallo: #facc15;
-  --arancione: #fb923c;
-  --rosso: #f87171;
 }
 
 * {
@@ -41,81 +36,78 @@ body {
   min-height: 100vh;
   padding:
     max(18px, env(safe-area-inset-top))
-    16px
+    15px
     max(30px, env(safe-area-inset-bottom));
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     Arial,
     sans-serif;
+
   background:
-    radial-gradient(
-      circle at top,
-      #163252 0,
-      var(--sfondo) 320px
-    );
+    radial-gradient(circle at top, #173454 0, var(--sfondo) 350px);
+
   color: var(--testo);
 }
 
 .contenitore {
   width: 100%;
-  max-width: 720px;
-  margin: 0 auto;
+  max-width: 760px;
+  margin: auto;
 }
 
 .intestazione {
   text-align: center;
-  padding: 10px 5px 20px;
+  padding: 8px 5px 20px;
 }
 
 .logo {
   width: 62px;
   height: 62px;
-  margin: 0 auto 12px;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #16a34a, #22c55e);
   border-radius: 20px;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
   font-size: 31px;
   box-shadow: 0 10px 30px rgba(34, 197, 94, 0.25);
 }
 
 h1 {
-  margin: 0;
+  margin: 12px 0 0;
   font-size: 28px;
-  letter-spacing: -0.5px;
 }
 
 .sottotitolo {
-  margin-top: 8px;
-  color: var(--testo-secondario);
+  margin-top: 7px;
+  color: var(--secondario);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .pannello {
   padding: 15px;
-  margin-bottom: 18px;
-  background: rgba(15, 29, 48, 0.94);
+  background: rgba(15, 29, 48, 0.96);
   border: 1px solid var(--bordo);
   border-radius: 18px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
 }
 
 .filtri {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 11px;
+  gap: 12px;
 }
 
 label {
   display: block;
-  margin-bottom: 7px;
-  color: var(--testo-secondario);
+  margin: 0 0 6px;
+  color: var(--secondario);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 750;
 }
 
 input,
@@ -125,37 +117,42 @@ select {
   padding: 11px 12px;
   border: 1px solid var(--bordo);
   border-radius: 12px;
-  background: #ffffff;
+  background: white;
   color: #111827;
   font-size: 16px;
+}
+
+.gruppo-quote {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
 }
 
 button {
   width: 100%;
   min-height: 50px;
-  margin-top: 12px;
-  border: 0;
+  margin-top: 13px;
+  border: none;
   border-radius: 13px;
   background: linear-gradient(135deg, var(--blu), #3b82f6);
   color: white;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 850;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.27);
 }
 
 button:active {
   transform: scale(0.98);
 }
 
-button:disabled {
-  opacity: 0.55;
-  cursor: default;
+.pulsante-reset {
+  margin-top: 9px;
+  background: #334155;
 }
 
 .stato {
   margin-top: 12px;
-  color: var(--testo-secondario);
+  color: var(--secondario);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -165,7 +162,7 @@ button:disabled {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 22px 2px 12px;
+  margin: 23px 2px 12px;
 }
 
 .titolo-risultati h2 {
@@ -174,12 +171,12 @@ button:disabled {
 }
 
 .contatore {
-  padding: 5px 9px;
+  padding: 6px 10px;
   border-radius: 999px;
-  background: var(--scheda);
-  color: var(--testo-secondario);
+  background: var(--card);
+  color: var(--secondario);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: bold;
 }
 
 .card {
@@ -196,24 +193,12 @@ button:disabled {
   border: 1px solid var(--bordo);
   border-left: 6px solid var(--verde);
   border-radius: 17px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
-}
-
-.card::after {
-  content: "";
-  position: absolute;
-  top: -42px;
-  right: -42px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: rgba(34, 197, 94, 0.08);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
 }
 
 .partita {
   position: relative;
   z-index: 1;
-  padding-right: 15px;
   font-size: 19px;
   font-weight: 850;
   line-height: 1.35;
@@ -232,7 +217,7 @@ button:disabled {
   padding: 6px 9px;
   border: 1px solid var(--bordo);
   border-radius: 999px;
-  background: rgba(7, 17, 31, 0.55);
+  background: rgba(7, 17, 31, 0.58);
   color: #d8e1ec;
   font-size: 12px;
 }
@@ -252,13 +237,13 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 9px;
   margin-top: 12px;
 }
 
 .quota {
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 17px;
+  font-weight: 850;
 }
 
 .affidabilita {
@@ -269,7 +254,7 @@ button:disabled {
 }
 
 .alta {
-  background: var(--verde-scuro);
+  background: #14532d;
   color: #bbf7d0;
 }
 
@@ -292,14 +277,14 @@ button:disabled {
 }
 
 .caricamento {
-  background: var(--scheda);
+  background: var(--card);
   color: var(--giallo);
 }
 
 .vuoto {
-  background: var(--scheda);
-  border: 1px dashed #53647a;
-  color: var(--testo-secondario);
+  background: var(--card);
+  border: 1px dashed #64748b;
+  color: var(--secondario);
 }
 
 .errore {
@@ -309,7 +294,7 @@ button:disabled {
 }
 
 .aggiornamento {
-  margin-top: 8px;
+  margin-top: 9px;
   text-align: center;
   color: #7e8da2;
   font-size: 12px;
@@ -319,8 +304,8 @@ button:disabled {
   margin-top: 22px;
   padding: 13px;
   border-radius: 13px;
-  background: rgba(15, 29, 48, 0.8);
-  color: #8492a6;
+  background: rgba(15, 29, 48, 0.82);
+  color: #8795a8;
   font-size: 12px;
   line-height: 1.5;
   text-align: center;
@@ -331,7 +316,8 @@ button:disabled {
     grid-template-columns: 1fr 1fr;
   }
 
-  button {
+  .campo-intero,
+  .gruppo-quote {
     grid-column: 1 / -1;
   }
 }
@@ -343,14 +329,15 @@ button:disabled {
 <main class="contenitore">
 
   <header class="intestazione">
+
     <div class="logo">⚽</div>
 
     <h1>Pronostici Over 1.5</h1>
 
     <div class="sottotitolo">
-      Partite selezionate con quota compresa
-      tra 1,30 e 1,50
+      Tutti i campionati presenti nel file partite.json
     </div>
+
   </header>
 
   <section class="pannello">
@@ -358,47 +345,115 @@ button:disabled {
     <div class="filtri">
 
       <div>
-        <label for="dataScelta">
-          Data
-        </label>
-
-        <input
-          type="date"
-          id="dataScelta"
-        >
+        <label for="dataScelta">📅 Data</label>
+        <input type="date" id="dataScelta">
       </div>
 
       <div>
-        <label for="filtroAffidabilita">
-          Affidabilità
-        </label>
+        <label for="campionatoScelto">🏆 Campionato</label>
 
-        <select id="filtroAffidabilita">
-          <option value="TUTTE">
-            Tutte
-          </option>
-
-          <option value="ALTA">
-            Alta
-          </option>
-
-          <option value="BUONA">
-            Buona
-          </option>
-
-          <option value="DISCRETA">
-            Discreta
+        <select id="campionatoScelto">
+          <option value="TUTTI">
+            Tutti i campionati
           </option>
         </select>
       </div>
 
+      <div>
+        <label for="filtroAffidabilita">
+          📊 Affidabilità
+        </label>
+
+        <select id="filtroAffidabilita">
+          <option value="TUTTE">Tutte</option>
+          <option value="ALTA">Alta</option>
+          <option value="BUONA">Buona</option>
+          <option value="DISCRETA">Discreta</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="ordinamento">
+          ↕️ Ordinamento
+        </label>
+
+        <select id="ordinamento">
+          <option value="ORARIO">
+            Per orario
+          </option>
+
+          <option value="QUOTA_CRESCENTE">
+            Quota più bassa
+          </option>
+
+          <option value="QUOTA_DECRESCENTE">
+            Quota più alta
+          </option>
+
+          <option value="AFFIDABILITA">
+            Affidabilità
+          </option>
+        </select>
+      </div>
+
+      <div class="campo-intero">
+        <label for="ricercaSquadra">
+          🔎 Cerca squadra o partita
+        </label>
+
+        <input
+          type="search"
+          id="ricercaSquadra"
+          placeholder="Esempio: Juventus"
+        >
+      </div>
+
+      <div class="gruppo-quote">
+
+        <div>
+          <label for="quotaMinima">
+            Quota minima
+          </label>
+
+          <input
+            type="number"
+            id="quotaMinima"
+            value="1.30"
+            min="1.01"
+            max="10"
+            step="0.01"
+          >
+        </div>
+
+        <div>
+          <label for="quotaMassima">
+            Quota massima
+          </label>
+
+          <input
+            type="number"
+            id="quotaMassima"
+            value="1.50"
+            min="1.01"
+            max="10"
+            step="0.01"
+          >
+        </div>
+
+      </div>
+
     </div>
 
+    <button id="pulsanteAggiorna" type="button">
+      🔄 Aggiorna partite
+    </button>
+
     <button
-      id="pulsanteAggiorna"
+      id="pulsanteReset"
+      class="pulsante-reset"
       type="button"
     >
-      🔄 Aggiorna partite
+      Azzera filtri
     </button>
 
     <div id="stato" class="stato">
@@ -411,10 +466,7 @@ button:disabled {
 
     <h2>🟢 Selezioni del giorno</h2>
 
-    <span
-      id="contatore"
-      class="contatore"
-    >
+    <span id="contatore" class="contatore">
       0 partite
     </span>
 
@@ -428,11 +480,14 @@ button:disabled {
 
   </section>
 
-  <div id="ultimoAggiornamento" class="aggiornamento"></div>
+  <div
+    id="ultimoAggiornamento"
+    class="aggiornamento"
+  ></div>
 
   <div class="avviso">
-    I pronostici hanno finalità informative.
-    Nessuna selezione garantisce il risultato.
+    Le selezioni hanno finalità informative.
+    Nessun pronostico garantisce il risultato.
   </div>
 
 </main>
@@ -459,25 +514,13 @@ function dataOggi() {
 }
 
 function normalizzaQuota(quota) {
-  return Number(
+  const numero = Number(
     String(quota).replace(",", ".")
   );
-}
 
-function classeAffidabilita(affidabilita) {
-  const valore = String(
-    affidabilita || ""
-  ).toLowerCase();
-
-  if (valore === "alta") {
-    return "alta";
-  }
-
-  if (valore === "buona") {
-    return "buona";
-  }
-
-  return "discreta";
+  return Number.isFinite(numero)
+    ? numero
+    : 0;
 }
 
 function pulisciTesto(testo) {
@@ -489,255 +532,61 @@ function pulisciTesto(testo) {
     .replaceAll("'", "&#039;");
 }
 
-function creaCard(partita) {
+function classeAffidabilita(valore) {
   const affidabilita =
-    String(partita.affidabilita || "DISCRETA")
-      .toUpperCase();
+    String(valore || "").toUpperCase();
 
-  const classe =
-    classeAffidabilita(affidabilita);
-
-  const quota =
-    normalizzaQuota(partita.quota)
-      .toFixed(2)
-      .replace(".", ",");
-
-  return `
-    <article class="card">
-
-      <div class="partita">
-        ${pulisciTesto(partita.partita)}
-      </div>
-
-      <div class="dettagli">
-
-        <span class="etichetta">
-          🏆 ${pulisciTesto(partita.campionato)}
-        </span>
-
-        <span class="etichetta">
-          🕒 ${pulisciTesto(partita.ora)}
-        </span>
-
-      </div>
-
-      <div class="pronostico">
-        ✅ Pronostico: Over 1.5
-      </div>
-
-      <div class="riga-finale">
-
-        <div class="quota">
-          Quota ${quota}
-        </div>
-
-        <div class="affidabilita ${classe}">
-          ${affidabilita}
-        </div>
-
-      </div>
-
-    </article>
-  `;
-}
-
-function mostraPartite() {
-  const contenitore =
-    document.getElementById("listaPartite");
-
-  const dataScelta =
-    document.getElementById("dataScelta").value;
-
-  const filtroAffidabilita =
-    document.getElementById(
-      "filtroAffidabilita"
-    ).value;
-
-  const filtrate = tutteLePartite
-    .filter(partita => {
-      const stessaData =
-        partita.data === dataScelta;
-
-      const quota =
-        normalizzaQuota(partita.quota);
-
-      const quotaValida =
-        quota >= 1.30 &&
-        quota <= 1.50;
-
-      const affidabilita =
-        String(
-          partita.affidabilita || ""
-        ).toUpperCase();
-
-      const affidabilitaValida =
-        filtroAffidabilita === "TUTTE" ||
-        affidabilita === filtroAffidabilita;
-
-      return (
-        stessaData &&
-        quotaValida &&
-        affidabilitaValida
-      );
-    })
-    .sort((a, b) => {
-      if (a.ora !== b.ora) {
-        return a.ora.localeCompare(b.ora);
-      }
-
-      return (
-        normalizzaQuota(a.quota) -
-        normalizzaQuota(b.quota)
-      );
-    });
-
-  document.getElementById(
-    "contatore"
-  ).textContent =
-    filtrate.length +
-    (filtrate.length === 1
-      ? " partita"
-      : " partite");
-
-  if (filtrate.length === 0) {
-    contenitore.innerHTML = `
-      <div class="vuoto">
-        <strong>Nessuna selezione trovata.</strong>
-        <br><br>
-        Per questa data non risultano partite
-        Over 1.5 con quota compresa tra
-        1,30 e 1,50.
-      </div>
-    `;
-
-    return;
+  if (affidabilita === "ALTA") {
+    return "alta";
   }
 
-  contenitore.innerHTML =
-    filtrate.map(creaCard).join("");
+  if (affidabilita === "BUONA") {
+    return "buona";
+  }
+
+  return "discreta";
 }
 
-async function caricaPartite() {
-  const pulsante =
+function valoreAffidabilita(valore) {
+  const affidabilita =
+    String(valore || "").toUpperCase();
+
+  if (affidabilita === "ALTA") {
+    return 3;
+  }
+
+  if (affidabilita === "BUONA") {
+    return 2;
+  }
+
+  return 1;
+}
+
+function aggiornaCampionati() {
+  const menu =
     document.getElementById(
-      "pulsanteAggiorna"
+      "campionatoScelto"
     );
 
-  const stato =
-    document.getElementById("stato");
+  const selezioneAttuale = menu.value;
 
-  const contenitore =
-    document.getElementById(
-      "listaPartite"
-    );
+  const campionati = [
+    ...new Set(
+      tutteLePartite
+        .map(partita =>
+          String(partita.campionato || "").trim()
+        )
+        .filter(Boolean)
+    )
+  ].sort((a, b) =>
+    a.localeCompare(b, "it")
+  );
 
-  pulsante.disabled = true;
-
-  pulsante.textContent =
-    "Caricamento...";
-
-  stato.textContent =
-    "Lettura del file partite.json.";
-
-  contenitore.innerHTML = `
-    <div class="caricamento">
-      Aggiornamento delle partite...
-    </div>
+  menu.innerHTML = `
+    <option value="TUTTI">
+      Tutti i campionati
+    </option>
   `;
 
-  try {
-    const risposta = await fetch(
-      FILE_PARTITE + "?v=" + Date.now(),
-      {
-        cache: "no-store"
-      }
-    );
-
-    if (!risposta.ok) {
-      throw new Error(
-        "File partite.json non trovato"
-      );
-    }
-
-    const dati = await risposta.json();
-
-    if (!Array.isArray(dati)) {
-      throw new Error(
-        "Il contenuto di partite.json non è valido"
-      );
-    }
-
-    tutteLePartite = dati;
-
-    stato.textContent =
-      "Dati caricati correttamente.";
-
-    document.getElementById(
-      "ultimoAggiornamento"
-    ).textContent =
-      "Ultimo caricamento: " +
-      new Date().toLocaleString("it-IT");
-
-    mostraPartite();
-
-  } catch (errore) {
-    tutteLePartite = [];
-
-    stato.textContent =
-      "Errore durante il caricamento.";
-
-    contenitore.innerHTML = `
-      <div class="errore">
-        <strong>Impossibile caricare le partite.</strong>
-        <br><br>
-        Verifica che il file
-        <strong>partite.json</strong>
-        sia presente nello stesso repository
-        di index.html.
-        <br><br>
-        Dettaglio: ${pulisciTesto(errore.message)}
-      </div>
-    `;
-
-    document.getElementById(
-      "contatore"
-    ).textContent = "0 partite";
-
-  } finally {
-    pulsante.disabled = false;
-
-    pulsante.textContent =
-      "🔄 Aggiorna partite";
-  }
-}
-
-document.getElementById(
-  "dataScelta"
-).value = dataOggi();
-
-document.getElementById(
-  "pulsanteAggiorna"
-).addEventListener(
-  "click",
-  caricaPartite
-);
-
-document.getElementById(
-  "dataScelta"
-).addEventListener(
-  "change",
-  mostraPartite
-);
-
-document.getElementById(
-  "filtroAffidabilita"
-).addEventListener(
-  "change",
-  mostraPartite
-);
-
-caricaPartite();
-</script>
-
-</body>
-</html>
+  campionati.forEach(campionato => {
+    const opzione 
