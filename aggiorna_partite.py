@@ -509,18 +509,18 @@ def main():
         )
         sys.exit(1)
 
-    print("VERSIONE TEST 12345")
+    print("VERSIONE CORRETTA")
 
     html = scarica_pagina()
 
-    print("HTML scaricato:", len(html))
+    print("HTML scaricato:", len(html), "caratteri")
 
-with open(
-    "pagina.html",
-    "w",
-    encoding="utf-8"
-) as f:
-    f.write(html)
+    with open(
+        "pagina.html",
+        "w",
+        encoding="utf-8"
+    ) as f:
+        f.write(html)
 
     soup = BeautifulSoup(
         html,
@@ -537,8 +537,8 @@ with open(
 
     if not partite:
         print(
-        "Nessuna partita Over 1.5 valida trovata. "
-        "Mantengo il file partite.json esistente."
+            "Nessuna partita Over 1.5 valida trovata. "
+            "Mantengo il file partite.json esistente."
         )
         sys.exit(0)
 
