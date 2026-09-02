@@ -509,6 +509,8 @@ def main():
         )
         sys.exit(1)
 
+    print("VERSIONE TEST 12345")
+
     html = scarica_pagina()
 
     print("HTML scaricato:", len(html))
