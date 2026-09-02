@@ -525,11 +525,11 @@ def main():
     partite = ordina_partite(partite)
 
     if not partite:
-        print(
-            "Nessuna partita Over 1.5 valida trovata. "
-            "Il file partite.json non verrà sovrascritto."
-        )
-        sys.exit(1)
+    print(
+        "Nessuna partita Over 1.5 valida trovata. "
+        "Mantengo il file partite.json esistente."
+    )
+    sys.exit(0)
 
     FILE_OUTPUT.write_text(
         json.dumps(
