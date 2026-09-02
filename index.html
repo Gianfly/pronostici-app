@@ -55,6 +55,8 @@ body{
 }
 
 .filtri{
+    display:grid;
+    gap:10px;
     margin-bottom:20px;
 }
 
@@ -77,7 +79,7 @@ select{
 }
 
 .match{
-    font-size:22px;
+    font-size:24px;
     font-weight:bold;
     margin-bottom:10px;
 }
@@ -114,206 +116,13 @@ select{
 <body>
 
 <div class="header">
+
 <h1>⚽ OVER 1.5 PREDICTOR</h1>
+
 <p>Algoritmo V1.0</p>
+
 </div>
 
 <div class="stats">
 
-<div class="stat">
-<h3 id="totale">0</h3>
-<span>Partite</span>
-</div>
-
-<div class="stat">
-<h3 id="alta">0</h3>
-<span>Alta</span>
-</div>
-
-<div class="stat">
-<h3 id="buona">0</h3>
-<span>Buona+</span>
-</div>
-
-</div>
-
-<div class="filtri">
-
-<select id="filtroCampionato">
-
-<option value="TUTTI">
-🏆 Tutti i campionati
-</option>
-
-</select>
-
-</div>
-
-<div id="lista"></div>
-
-<script>
-
-let tutteLePartite=[];
-
-function renderPartite(dati){
-
-dati.sort((a,b)=>b.score-a.score);
-
-let html="";
-
-dati.forEach(p=>{
-
-html+=`
-
-<div class="card">
-
-<div class="match">
-${p.partita}
-</div>
-
-<div class="info">
-🏆 ${p.campionato}
-</div>
-
-<div class="info">
-🕒 ${p.ora}
-</div>
-
-<div class="info">
-📈 Casa Over 1.5: ${p.casa_over15}/5
-</div>
-
-<div class="info">
-📈 Ospite Over 1.5: ${p.ospite_over15}/5
-</div>
-
-<div class="info">
-⚽ Media Gol Casa: ${p.media_casa}
-</div>
-
-<div class="info">
-⚽ Media Gol Ospite: ${p.media_ospite}
-</div>
-
-<div class="score ${p.affidabilita.toLowerCase()}">
-📊 Score ${p.score}/12
-</div>
-
-<div class="${p.affidabilita.toLowerCase()}">
-🏅 ${p.affidabilita}
-</div>
-
-</div>
-
-`;
-
-});
-
-document.getElementById(
-"lista"
-).innerHTML=html;
-
-}
-
-fetch("partite.json?v="+Date.now())
-
-.then(r=>r.json())
-
-.then(dati=>{
-
-tutteLePartite=dati;
-
-let alta=0;
-let buona=0;
-
-document.getElementById(
-"totale"
-).innerText=dati.length;
-
-dati.forEach(p=>{
-
-if(
-p.affidabilita==="ALTA"
-) alta++;
-
-if(
-p.affidabilita==="ALTA" ||
-p.affidabilita==="BUONA"
-) buona++;
-
-});
-
-document.getElementById(
-"alta"
-).innerText=alta;
-
-document.getElementById(
-"buona"
-).innerText=buona;
-
-const select=
-document.getElementById(
-"filtroCampionato"
-);
-
-const campionati=[
-...new Set(
-dati.map(
-p=>p.campionato
-)
-)
-];
-
-campionati.sort();
-
-campionati.forEach(c=>{
-
-const option=
-document.createElement("option");
-
-option.value=c;
-
-option.textContent=c;
-
-select.appendChild(option);
-
-});
-
-renderPartite(dati);
-
-select.addEventListener(
-"change",
-()=>{
-
-const valore=select.value;
-
-if(
-valore==="TUTTI"
-){
-
-renderPartite(
-tutteLePartite
-);
-
-return;
-
-}
-
-renderPartite(
-
-tutteLePartite.filter(
-p=>p.campionato===valore
-)
-
-);
-
-}
-
-);
-
-});
-
-</script>
-
-</body>
-</html>
+<div class=
