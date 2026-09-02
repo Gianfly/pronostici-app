@@ -511,6 +511,15 @@ def main():
 
     html = scarica_pagina()
 
+    print("HTML scaricato:", len(html))
+
+with open(
+    "pagina.html",
+    "w",
+    encoding="utf-8"
+) as f:
+    f.write(html)
+
     soup = BeautifulSoup(
         html,
         "html.parser"
