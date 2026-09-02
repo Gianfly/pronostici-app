@@ -525,11 +525,11 @@ def main():
     partite = ordina_partite(partite)
 
     if not partite:
-    print(
+        print(
         "Nessuna partita Over 1.5 valida trovata. "
         "Mantengo il file partite.json esistente."
-    )
-    sys.exit(0)
+        )
+        sys.exit(0)
 
     FILE_OUTPUT.write_text(
         json.dumps(
